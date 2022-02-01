@@ -2,7 +2,7 @@
 #
 # Add environment-specific variables on new lines in the form of NAME=VALUE
 # 
-MONGODB_CONNECTION_STRING=<YORDATAHERE>
+MONGODB_CONNECTION_STRING=mongodb+srv://USER:PASSWORD@cluster0.gcajw.mongodb.net/reminders?retryWrites=true&w=majority
 SENDGRID_KEY_STRING=<YORDATAHERE>
 SESSION_SECRET=<YORDATAHERE>
 HEROKU_APP_URL=<YORDATAHERE>
