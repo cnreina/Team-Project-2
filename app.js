@@ -9,6 +9,7 @@
 require('dotenv').config();
 const express                   = require('express');
 const session                   = require('express-session');
+const SESSION_SECRET            = process.env.SESSION_SECRET;
 const bodyParser                = require('body-parser');
 
 // MongoDB
@@ -20,7 +21,7 @@ const sessionStore              = new MongoDBStore({uri: MONGODB_CONNECTION_STRI
 
 const APP_CWD                   = process.cwd();
 const PORT                      = process.env.PORT || 3000;
-const HEROKU_APP_URL            = "https://cse341nodejsapp.herokuapp.com/";
+const HEROKU_APP_URL            = process.env.HEROKU_APP_URL;
 
 const CORS_OPTIONS              = { origin: HEROKU_APP_URL, optionsSuccessStatus: 200 };
 const cors                      = require('cors');
@@ -77,7 +78,7 @@ app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 app.use(express.static(APP_CWD + '/public'));
 app.use('/images', express.static(APP_CWD + '/images'));
 
-const SESSION_OPTIONS = {secret: 'sessionSecret', resave: false, saveUninitialized: false, store: sessionStore};
+const SESSION_OPTIONS = {secret: SESSION_SECRET, resave: false, saveUninitialized: false, store: sessionStore};
 app.use(session(SESSION_OPTIONS));
 
 app.use(csrfProtection);
