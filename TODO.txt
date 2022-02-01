@@ -9,26 +9,3 @@ dev environment and gitignore setup
 ADD
 -------------------------------------------
 
-team heroku app
-
-
-npm run pre-build && npm run build_logic && npm run post_build && npm run exit
-
-Explanation:
-
-    Use && (double ampersand) for sequential execution.
-    Use & (single ampersand) for parallel execution.
-
-
-{
-
-  "config": {
-    "part1": "--many --commands",
-    "part2": "--are --required",
-    "part3": "--on --a",
-    "part4": "--single --line",
-  },
-  "script": {
-    "build": "cmd $npm_package_config_part1 $npm_package_config_part2 $npm_package_config_part3 $npm_package_config_part4"
-  }
-}
