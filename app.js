@@ -21,9 +21,9 @@ const sessionStore              = new MongoDBStore({uri: MONGODB_CONNECTION_STRI
 
 const APP_CWD                   = process.cwd();
 const PORT                      = process.env.PORT || 3000;
-const HEROKU_APP_URL            = process.env.HEROKU_APP_URL;
+const HEROKU_TEAM_APP_URL       = process.env.HEROKU_TEAM_APP_URL;
 
-const CORS_OPTIONS              = { origin: HEROKU_APP_URL, optionsSuccessStatus: 200 };
+const CORS_OPTIONS              = { origin: HEROKU_TEAM_APP_URL, optionsSuccessStatus: 200 };
 const cors                      = require('cors');
 
 const csrf                      = require('csurf');
