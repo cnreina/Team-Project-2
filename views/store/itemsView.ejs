@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+        <%- include('../includes/navigationInclude.ejs') %>
+        <main>
+            <% if (items.length > 0) { %>
+                <div class="grid">
+                    <% for (let item of items) { %>
+                        <article class="card item-item">
+                            <header class="card__header">
+                                <h1 class="item__title">
+                                    <%= item.title %>
+                                </h1>
+                            </header>
+                            <div class="card__image">
+                                <img src="<%= item.imageUrl %>" alt="<%= item.title %>">
+                            </div>
+                            <div class="card__content">
+                                <h2 class="item__price">$
+                                    <%= item.price %>
+                                </h2>
+                                <p class="item__description">
+                                    <%= item.description %>
+                                </p>
+                            </div>
+                            <div class="card__actions">
+                                <a href="/store/item-list/<%= item._id %>" class="btn">Details</a>
+                                <% if (isAuthenticated) { %>
+                                    <%- include('../includes/addToCartInclude.ejs', {item: item}) %>
+                                <% } %>
+                            </div>
+                        </article>
+                        <% } %>
+                </div>
+                <%- include('../includes/paginationInclude.ejs', {
+                    currentPage: currentPage, 
+                    nextPage: nextPage, 
+                    previousPage: previousPage, 
+                    lastPage: lastPage, 
+                    hasNextPage: hasNextPage, 
+                    hasPreviousPage: hasPreviousPage
+                    })
+                %>
+                <% } else { %>
+                    <h1>No items found</h1>
+            <% } %>
+        </main>
+        <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>

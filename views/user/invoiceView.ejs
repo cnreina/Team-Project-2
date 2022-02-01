@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+        <%- include('../includes/navigationInclude.ejs') %>
+            <% if (!order) { %>
+                <h1>Order Not Found</h1>
+            <% } else { %>
+                <div class="invoiceContainer">
+                    <h1>Invoice</h1>
+                    <hr>
+                    <div>
+                        <% dateString = new Date(order.createdAt).toDateString() %>
+                        <h4>Order: <%= order._id%></h4>
+                        <h4>Date: <%= dateString %></h4>
+                        <table id="invoiceTable">
+                            <tbody>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                                <% let totalPrice = 0; %>
+                                <% order.items.forEach(item => { %>
+                                    <% totalPrice += item.quantity * item.item.price; %>
+                                    <tr>
+                                        <td><%= item.item.title %></td>
+                                        <td>$<%= item.item.price %></td>
+                                        <td><%= item.quantity %></td>
+                                        <td>$<%= item.quantity * item.item.price %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                        <div><h3>Order Total: $<%= totalPrice %></h3></div>
+                    </div>
+                    <hr>
+                </div>
+            <% } %>
+        <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>

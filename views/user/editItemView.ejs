@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+    <%- include('../includes/navigationInclude.ejs') %>
+        <main>
+            <% if (errorMessage) { %>
+                <div class="user-message user-message--error"><%= errorMessage %></div>
+            <% } %>
+            <form class="item-form" action="/user/edit-item" method="POST" enctype="multipart/form-data">
+                <div class="form-control">
+                    <label for="title">Title</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"
+                        type="text" 
+                        name="title" 
+                        id="title" 
+                        value="<% if (!hasError) { %><%= item.title %><% } %>">
+                </div>
+                <div class="form-control">
+                    <label for="imageUrl">Image URL</label>
+                    <input type="text" name="imageUrl" id="imageUrl" value="<% if (!hasError) { %><%= item.imageUrl %><% } %>">
+                </div>
+                <div class="form-control">
+                    <label for="price">Price</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'price') ? 'invalid' : '' %>"
+                        type="number" 
+                        name="price" 
+                        id="price" 
+                        step="0.01" 
+                        value="<% if (!hasError) { %><%= item.price %><% } %>">
+                </div>
+                <div class="form-control">
+                    <label for="description">Description</label>
+                    <textarea 
+                        class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
+                        name="description" 
+                        id="description" 
+                        rows="5"><% if (!hasError) { %><%= item.description %><% } %></textarea>
+                </div>
+                <input type="hidden" value="<%= item._id %>" name="itemId">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn" type="submit">Update Item</button>
+            </form>
+        </main>
+        <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>

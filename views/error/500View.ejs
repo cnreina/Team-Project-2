@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <headInclude>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+        <%- include('../includes/navigationInclude.ejs') %>
+        <div class="card__content">
+            <h1>Server Error</h1>
+            <p>test@email.com</p>
+            <% if (error) { %>
+                <p><%= error %></p>
+            <% } %>
+        </div>
+    <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>
