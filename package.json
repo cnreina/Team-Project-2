@@ -5,14 +5,15 @@
   "main": "app.js",
   "config": {
     "pullGit": "git pull origin main",
-    "pushGit": "git push main",
+    "pushGit": "git push origin main",
     "pullHeroku": "git pull heroku main",
     "pushHeroku": "git push heroku main:main"
   },
   "scripts": {
     "test": "nodemon app.js",
     "start": "node app.js",
-    "sync_heroku": "$npm_package_config_pullHeroku && $npm_package_config_pushHeroku"
+    "sync_GIT": "$npm_package_config_pullGit && $npm_package_config_pushGit",
+    "sync_HEROKU": "$npm_package_config_pullHeroku && $npm_package_config_pushHeroku"
   },
   "author": "CSE341 Team 2",
   "license": "",
