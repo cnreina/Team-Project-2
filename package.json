@@ -4,6 +4,7 @@
   "description": "CSE341-Team-Project-2",
   "main": "app.js",
   "config": {
+    "commitGit": "git commit -a -m \"update\"",
     "pullGit": "git pull origin main",
     "pushGit": "git push origin main",
     "pullHeroku": "git pull heroku main",
@@ -12,6 +13,7 @@
   "scripts": {
     "test": "nodemon app.js",
     "start": "node app.js",
+    "commit_GIT": "$npm_package_config_commitGit",
     "sync_GIT": "$npm_package_config_pullGit && $npm_package_config_pushGit",
     "sync_HEROKU": "$npm_package_config_pullHeroku && $npm_package_config_pushHeroku"
   },
