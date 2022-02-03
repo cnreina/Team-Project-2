@@ -4,6 +4,8 @@
   "description": "CSE341-Team-Project-2",
   "main": "app.js",
   "config": {
+    "pullGit": "git pull origin main",
+    "pushGit": "git push main",
     "pullHeroku": "git pull heroku main",
     "pushHeroku": "git push heroku main:main"
   },
