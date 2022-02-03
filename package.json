@@ -4,7 +4,7 @@
   "description": "CSE341-Team-Project-2",
   "main": "app.js",
   "config": {
-    "commitGit": "git commit -a -m \"update\"",
+    "commitGit": "git commit -a -m update",
     "pullGit": "git pull origin main",
     "pushGit": "git push origin main",
     "pullHeroku": "git pull heroku main",
