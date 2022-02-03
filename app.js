@@ -16,8 +16,8 @@ const bodyParser                = require('body-parser');
 const mongoose                  = require('mongoose');
 const MongoDBStore              = require('connect-mongodb-session')(session);
 const MONGODB_OPTIONS           = {useUnifiedTopology: true, useNewUrlParser: true, family: 4};
-const MONGODB_CONNECTION_STRING = process.env.MONGODB_CONNECTION_STRING;
-const sessionStore              = new MongoDBStore({uri: MONGODB_CONNECTION_STRING, collection: 'sessions'});
+const MONGODB_TEAM_CONNECTION_STRING = process.env.MONGODB_TEAM_CONNECTION_STRING;
+const sessionStore              = new MongoDBStore({uri: MONGODB_TEAM_CONNECTION_STRING, collection: 'sessions'});
 
 const APP_CWD                   = process.cwd();
 const PORT                      = process.env.PORT || 3000;
@@ -110,7 +110,7 @@ console.log('**********************************');
 console.log('  ');
 console.log('Starting Server . . .');
 console.log('Connecting MongoDB . . .');
-mongoose.connect(MONGODB_CONNECTION_STRING, MONGODB_OPTIONS).then(result => {
+mongoose.connect(MONGODB_TEAM_CONNECTION_STRING, MONGODB_OPTIONS).then(result => {
   console.log('MongoDB Is Connected');
   console.log('Connecting SendGrid . . .');
   authController.startSendGrid();
