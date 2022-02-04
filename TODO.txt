@@ -9,3 +9,14 @@ dev environment and gitignore setup
 ADD
 -------------------------------------------
 
+
+
+
+
+NOTES
+-------------------------------------------
+
+MVP:
+
+Log work
+
