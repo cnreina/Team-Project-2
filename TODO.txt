@@ -18,5 +18,5 @@ NOTES
 
 MVP:
 
-Log work
+Task Name > Punch-In button, Punch-Out button > Total Time
 
