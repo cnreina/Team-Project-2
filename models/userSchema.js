@@ -13,7 +13,7 @@ const UserSchema = new Schema({
   },
   resetToken: String,
   resetTokenExpiration: Date,
-  cart: {
+  timetracker: {
     tasks: [
       {
         taskId: {
@@ -29,39 +29,39 @@ const UserSchema = new Schema({
 { timestamps: true }
 );
 
-UserSchema.methods.addToCart = function(task) {
-  const cartTaskIndex = this.cart.tasks.findIndex(cartTask => {
-    return cartTask.taskId.toString() === task._id.toString();
+UserSchema.methods.addToTimeTracker = function(task) {
+  const timetrackerTaskIndex = this.timetracker.tasks.findIndex(timetrackerTask => {
+    return timetrackerTask.taskId.toString() === task._id.toString();
   });
   let newQuantity = 1;
-  const updatedCartTasks = [...this.cart.tasks];
+  const updatedTimeTrackerTasks = [...this.timetracker.tasks];
 
-  if (cartTaskIndex >= 0) {
-    newQuantity = this.cart.tasks[cartTaskIndex].quantity + 1;
-    updatedCartTasks[cartTaskIndex].quantity = newQuantity;
+  if (timetrackerTaskIndex >= 0) {
+    newQuantity = this.timetracker.tasks[timetrackerTaskIndex].quantity + 1;
+    updatedTimeTrackerTasks[timetrackerTaskIndex].quantity = newQuantity;
   } else {
-    updatedCartTasks.push({
+    updatedTimeTrackerTasks.push({
       taskId: task._id,
       quantity: newQuantity
     });
   }
-  const updatedCart = {
-    tasks: updatedCartTasks
+  const updatedTimeTracker = {
+    tasks: updatedTimeTrackerTasks
   };
-  this.cart = updatedCart;
+  this.timetracker = updatedTimeTracker;
   return this.save();
 };
 
-UserSchema.methods.removeFromCart = function(taskId) {
-  const updatedCartTasks = this.cart.tasks.filter(task => {
+UserSchema.methods.removeFromTimeTracker = function(taskId) {
+  const updatedTimeTrackerTasks = this.timetracker.tasks.filter(task => {
     return task.taskId.toString() !== taskId.toString();
   });
-  this.cart.tasks = updatedCartTasks;
+  this.timetracker.tasks = updatedTimeTrackerTasks;
   return this.save();
 };
 
-UserSchema.methods.clearCart = function() {
-  this.cart = { tasks: [] };
+UserSchema.methods.clearTimeTracker = function() {
+  this.timetracker = { tasks: [] };
   return this.save();
 };
 

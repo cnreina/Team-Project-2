@@ -185,49 +185,49 @@ exports.deleteTask = (req, res, next) => {
     });
 };
 
-exports.getCartView = (req, res, next) => {
-  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.cart.tasks;
+exports.getTimeTrackerView = (req, res, next) => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks;
       if (!tasks) {return next();};
-      res.render('user/cartView', {
-        path: '/user/cart',
-        pageTitle: 'Cart',
+      res.render('user/timetrackerView', {
+        path: '/user/timetracker',
+        pageTitle: 'TimeTracker',
         tasks: tasks
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getCartView ERROR: ', error);
+      console.log('getTimeTrackerView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postCart = (req, res, next) => {
+exports.postTimeTracker = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      return req.user.addToCart(task);
+      return req.user.addToTimeTracker(task);
     })
     .then(result => {
-      res.redirect('/user/cart');
+      res.redirect('/user/timetracker');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postCart ERROR: ', error);
+      console.log('postTimeTracker ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postRemoveCartTask = (req, res, next) => {
-  const cartTaskId = req.body.taskId;
-  req.user.removeFromCart(cartTaskId).then(result => {
-      res.redirect('/user/cart');
+exports.postRemoveTimeTrackerTask = (req, res, next) => {
+  const timetrackerTaskId = req.body.taskId;
+  req.user.removeFromTimeTracker(timetrackerTaskId).then(result => {
+      res.redirect('/user/timetracker');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postRemoveCartTask ERROR: ', error);
+      console.log('postRemoveTimeTrackerTask ERROR: ', error);
       return next(error);
     });
 };
@@ -249,8 +249,8 @@ exports.getOrdersView = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.cart.tasks.map(task => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks.map(task => {
         return {
           quantity: task.quantity,
           task: { ...task.taskId._doc }
@@ -266,7 +266,7 @@ exports.postOrder = (req, res, next) => {
       return order.save();
     })
     .then(result => {
-      return req.user.clearCart();
+      return req.user.clearTimeTracker();
     })
     .then(() => {
       res.redirect('/user/orders');
@@ -282,8 +282,8 @@ exports.postOrder = (req, res, next) => {
 exports.getCheckoutView = (req, res, next) => {
   let tasks;
   let totalPrice = 0;
-  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
-      tasks       = user.cart.tasks;
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      tasks       = user.timetracker.tasks;
       totalPrice  = 0.00;
       tasks.forEach(task => {
         totalPrice += task.quantity * task.taskId.price;
@@ -321,8 +321,8 @@ exports.getCheckoutView = (req, res, next) => {
 };
 
 exports.getCheckoutSuccess = (req, res, next) => {
-  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.cart.tasks.map(task => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks.map(task => {
         return {
           quantity:   task.quantity,
           task:       { ...task.taskId._doc }
@@ -338,7 +338,7 @@ exports.getCheckoutSuccess = (req, res, next) => {
       return order.save();
     })
     .then(result => {
-      return req.user.clearCart();
+      return req.user.clearTimeTracker();
     })
     .then(() => {
       res.redirect('/user/orders');

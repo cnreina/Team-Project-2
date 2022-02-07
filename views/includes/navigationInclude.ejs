@@ -11,7 +11,7 @@
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/cart' ? 'active' : '' %>" href="/user/cart">Cart</a>
+                    <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">TimeTracker</a>
                 </li>
                 <li class="main-header__task">
                     <a class="<%= path === '/user/orders' ? 'active' : '' %>" href="/user/orders">Orders</a>
@@ -56,7 +56,7 @@
         </li>
         <% if (isAuthenticated) { %>
             <li class="mobile-nav__task">
-                <a class="<%= path === '/user/cart' ? 'active' : '' %>" href="/user/cart">Cart</a>
+                <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">TimeTracker</a>
             </li>
             <li class="mobile-nav__task">
                 <a class="<%= path === '/user/orders' ? 'active' : '' %>" href="/user/orders">Orders</a>

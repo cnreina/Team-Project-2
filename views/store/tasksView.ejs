@@ -29,7 +29,7 @@
                             <div class="card__actions">
                                 <a href="/store/task-list/<%= task._id %>" class="btn">Details</a>
                                 <% if (isAuthenticated) { %>
-                                    <%- include('../includes/addToCartInclude.ejs', {task: task}) %>
+                                    <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
                                 <% } %>
                             </div>
                         </article>

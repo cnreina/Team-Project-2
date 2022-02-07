@@ -16,7 +16,7 @@
                     <h2><%= task.price %></h2>
                     <p><%= task.description %></p>
                     <% if (isAuthenticated) { %>
-                        <%- include('../includes/addToCartInclude.ejs', {task: task}) %>
+                        <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
                     <% } %>
                 </div>
             </article>

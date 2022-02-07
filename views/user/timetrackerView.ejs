@@ -7,12 +7,12 @@
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
             <% if (tasks.length > 0) { %>
-                <ul class="cart__task-list">
+                <ul class="timetracker__task-list">
                     <% tasks.forEach(task => { %>
-                        <li class="cart__task">
+                        <li class="timetracker__task">
                             <h1><%= task.taskId.title %></h1>
                             <h2>Quantity: <%= task.quantity %></h2>
-                            <form action="/user/cart-delete-task" method="POST">
+                            <form action="/user/timetracker-delete-task" method="POST">
                                 <input type="hidden" value="<%= task.taskId._id %>" name="taskId">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button class="btn danger" type="submit">Delete</button>
@@ -26,7 +26,7 @@
                 </div>
                 
             <% } else { %>
-                <h1>Cart is empty</h1>
+                <h1>TimeTracker is empty</h1>
             <% } %>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>
