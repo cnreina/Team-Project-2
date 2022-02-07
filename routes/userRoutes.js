@@ -47,7 +47,7 @@ router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
 // USER ORDERS
-router.get    ('/user/orders',              authController.isLogedIn, userController.getOrdersView);
-router.get    ('/user/orders/:orderId',     authController.isLogedIn, userController.getInvoiceView);
+router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
+router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getInvoiceView);
 
 module.exports = router;

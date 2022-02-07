@@ -5,15 +5,15 @@
     </head>
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
-            <% if (!order) { %>
-                <h1>Order Not Found</h1>
+            <% if (!archive) { %>
+                <h1>Archive Not Found</h1>
             <% } else { %>
                 <div class="invoiceContainer">
                     <h1>Invoice</h1>
                     <hr>
                     <div>
-                        <% dateString = new Date(order.createdAt).toDateString() %>
-                        <h4>Order: <%= order._id%></h4>
+                        <% dateString = new Date(archive.createdAt).toDateString() %>
+                        <h4>Archive: <%= archive._id%></h4>
                         <h4>Date: <%= dateString %></h4>
                         <table id="invoiceTable">
                             <tbody>
@@ -24,7 +24,7 @@
                                     <th>Total</th>
                                 </tr>
                                 <% let totalPrice = 0; %>
-                                <% order.tasks.forEach(task => { %>
+                                <% archive.tasks.forEach(task => { %>
                                     <% totalPrice += task.quantity * task.task.price; %>
                                     <tr>
                                         <td><%= task.task.title %></td>
@@ -35,7 +35,7 @@
                                 <% }); %>
                             </tbody>
                         </table>
-                        <div><h3>Order Total: $<%= totalPrice %></h3></div>
+                        <div><h3>Archive Total: $<%= totalPrice %></h3></div>
                     </div>
                     <hr>
                 </div>

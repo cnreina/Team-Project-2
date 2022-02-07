@@ -9,10 +9,9 @@
 */
 
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
+const ArchiveSchema = new Schema({
   tasks: [
     {
       task: { type: Object, required: true },
@@ -34,4 +33,4 @@ const OrderSchema = new Schema({
 { timestamps: true }
 );
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Archive', ArchiveSchema);

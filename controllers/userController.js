@@ -12,7 +12,7 @@ const APP_CWD               = process.cwd();
 const systemController      = require(APP_CWD + '/controllers/systemController');
 
 const Task                  = require(APP_CWD + '/models/taskSchema');
-const Order                 = require(APP_CWD + '/models/orderSchema');
+const Archive                 = require(APP_CWD + '/models/archiveSchema');
 
 exports.getAddTaskView = (req, res, next) => {
   res.render('user/addTaskView', {
@@ -232,23 +232,23 @@ exports.postRemoveTimeTrackerTask = (req, res, next) => {
     });
 };
 
-exports.getOrdersView = (req, res, next) => {
-  Order.find({'user.userId': req.user._id}).then(orders => {
-      res.render('user/ordersView', {
-        path: '/user/orders',
-        pageTitle: 'Orders',
-        orders: orders
+exports.getArchiveView = (req, res, next) => {
+  Archive.find({'user.userId': req.user._id}).then(archive => {
+      res.render('user/archiveView', {
+        path: '/user/archive',
+        pageTitle: 'Archive',
+        archive: archive
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getOrdersView ERROR: ', error);
+      console.log('getArchiveView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postOrder = (req, res, next) => {
+exports.postArchive = (req, res, next) => {
   req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
       const tasks = user.timetracker.tasks.map(task => {
         return {
@@ -256,25 +256,25 @@ exports.postOrder = (req, res, next) => {
           task: { ...task.taskId._doc }
         };
       });
-      const order = new Order({
+      const archive = new Archive({
         user: {
           email:  req.user.email,
           userId: req.user
         },
         tasks: tasks
       });
-      return order.save();
+      return archive.save();
     })
     .then(result => {
       return req.user.clearTimeTracker();
     })
     .then(() => {
-      res.redirect('/user/orders');
+      res.redirect('/user/archive');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postOrder ERROR: ', error);
+      console.log('postArchive ERROR: ', error);
       return next(error);
     });
 };
@@ -328,20 +328,20 @@ exports.getCheckoutSuccess = (req, res, next) => {
           task:       { ...task.taskId._doc }
         };
       });
-      const order = new Order({
+      const archive = new Archive({
         user: {
           email:  req.user.email,
           userId: req.user
         },
         tasks:    tasks
       });
-      return order.save();
+      return archive.save();
     })
     .then(result => {
       return req.user.clearTimeTracker();
     })
     .then(() => {
-      res.redirect('/user/orders');
+      res.redirect('/user/archive');
     })
     .catch(err => {
       const error = new Error(err);
@@ -352,21 +352,21 @@ exports.getCheckoutSuccess = (req, res, next) => {
 };
 
 exports.getInvoiceView = (req, res, next) => {
-  const orderId = req.params.orderId;
-  Order.findById(orderId).then(order => {
-    if (!order) {
-      console.log('getInvoiceView ERROR: ', order);
-      return next(new Error('Order not found'));
+  const archiveId = req.params.archiveId;
+  Archive.findById(archiveId).then(archive => {
+    if (!archive) {
+      console.log('getInvoiceView ERROR: ', archive);
+      return next(new Error('Archive not found'));
     }
-    if (order.user.userId.toString() !== req.user._id.toString()) {
+    if (archive.user.userId.toString() !== req.user._id.toString()) {
       console.log('getInvoiceView ERROR: Unauthorized');
       return next(new Error('Unauthorized'));
     }
     
     res.render('user/invoiceView', {
       pageTitle:        'Invoice',
-      path:             '/user/orders',
-      order:            order,
+      path:             '/user/archive',
+      archive:            archive,
       hasError:         false,
       errorMessage:     null,
       validationErrors: []
