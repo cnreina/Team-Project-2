@@ -11,11 +11,11 @@
             <% } else { %>
                 <ul class="orders">
                     <% orders.forEach(order => { %>
-                        <li class="orders__item">
+                        <li class="orders__task">
                             <h1>Order - # <%= order._id %> - <a href="/user/orders/<%= order._id %>">Invoice</a></h1>
-                            <ul class="orders__items">
-                                <% order.items.forEach(item => { %>
-                                    <li class="orders__items-item"><%= item.item.title %> (<%= item.quantity %>)</li>
+                            <ul class="orders__tasks">
+                                <% order.tasks.forEach(task => { %>
+                                    <li class="orders__tasks-task"><%= task.task.title %> (<%= task.quantity %>)</li>
                                 <% }); %>
                             </ul>
                         </li>

@@ -13,9 +13,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-  items: [
+  tasks: [
     {
-      item: { type: Object, required: true },
+      task: { type: Object, required: true },
       quantity: { type: Number, required: true }
     }
   ],

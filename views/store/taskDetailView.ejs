@@ -7,16 +7,16 @@
         <%- include('../includes/navigationInclude.ejs') %>
         <main class="centered">
             <article class="card">
-                <h1><%= item.title %></h1>
+                <h1><%= task.title %></h1>
                 <hr>
                 <div class="image">
-                    <img src="<%= item.imageUrl %>" alt="<%= item.title %>">
+                    <img src="<%= task.imageUrl %>" alt="<%= task.title %>">
                 </div>
                 <div class="card__content">
-                    <h2><%= item.price %></h2>
-                    <p><%= item.description %></p>
+                    <h2><%= task.price %></h2>
+                    <p><%= task.description %></p>
                     <% if (isAuthenticated) { %>
-                        <%- include('../includes/addToCartInclude.ejs', {item: item}) %>
+                        <%- include('../includes/addToCartInclude.ejs', {task: task}) %>
                     <% } %>
                 </div>
             </article>

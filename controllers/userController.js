@@ -11,30 +11,30 @@ const APP_CWD               = process.cwd();
 
 const systemController      = require(APP_CWD + '/controllers/systemController');
 
-const Item                  = require(APP_CWD + '/models/itemSchema');
+const Task                  = require(APP_CWD + '/models/taskSchema');
 const Order                 = require(APP_CWD + '/models/orderSchema');
 
-exports.getAddItemView = (req, res, next) => {
-  res.render('user/addItemView', {
-    pageTitle: 'Add Item',
-    path: '/user/add-item',
+exports.getAddTaskView = (req, res, next) => {
+  res.render('user/addTaskView', {
+    pageTitle: 'Add Task',
+    path: '/user/add-task',
     hasError: false,
     errorMessage: null,
     validationErrors: []
   });
 };
 
-exports.postAddItem = (req, res, next) => {
+exports.postAddTask = (req, res, next) => {
   const title       = req.body.title;
   const imageUrl    = req.body.imageUrl;
   const price       = req.body.price;
   const description = req.body.description;
   if (!imageUrl) {
-    return res.status(422).render('user/addItemView', {
-      pageTitle: 'Add Item',
-      path: '/user/add-item',
+    return res.status(422).render('user/addTaskView', {
+      pageTitle: 'Add Task',
+      path: '/user/add-task',
       hasError: true,
-      Item: {
+      Task: {
         title: title,
         price: price,
         description: description
@@ -47,11 +47,11 @@ exports.postAddItem = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render('user/addItemView', {
-      pageTitle: 'Add Item',
-      path: '/user/add-item',
+    return res.status(422).render('user/addTaskView', {
+      pageTitle: 'Add Task',
+      path: '/user/add-task',
       hasError: true,
-      Item: {
+      Task: {
         title: title,
         price: price,
         description: description
@@ -61,35 +61,35 @@ exports.postAddItem = (req, res, next) => {
     });
   }
 
-  const item = new Item({
+  const task = new Task({
     title:        title,
     price:        price,
     description:  description,
     imageUrl:     imageUrl,
     userId:       req.user
   });
-  item.save().then(result => {
-      res.redirect('/user/item-list');
+  task.save().then(result => {
+      res.redirect('/user/task-list');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postAddItem ERROR: ', error);
+      console.log('postAddTask ERROR: ', error);
       return next(error);
     });
 };
 
-exports.getEditItemView = (req, res, next) => {
-  const itemId = req.params.itemId;
-  Item.findById(itemId).then(item => {
-      if (!item) {
-        console.log('getEditItemView ERROR: ', item);
+exports.getEditTaskView = (req, res, next) => {
+  const taskId = req.params.taskId;
+  Task.findById(taskId).then(task => {
+      if (!task) {
+        console.log('getEditTaskView ERROR: ', task);
         return res.redirect('/');
       }
-      res.render('user/editItemView', {
-        pageTitle:        'Edit Item',
-        path:             '/user/edit-item',
-        item:             item,
+      res.render('user/editTaskView', {
+        pageTitle:        'Edit Task',
+        path:             '/user/edit-task',
+        task:             task,
         hasError:         false,
         errorMessage:     null,
         validationErrors: []
@@ -98,13 +98,13 @@ exports.getEditItemView = (req, res, next) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getEditItemView ERROR: ', error);
+      console.log('getEditTaskView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postEditItem = (req, res, next) => {
-  const itemId            = req.body.itemId;
+exports.postEditTask = (req, res, next) => {
+  const taskId            = req.body.taskId;
   const updatedTitle      = req.body.title;
   const updatedPrice      = req.body.price;
   const updatedImageUrl   = req.body.imageUrl;
@@ -112,87 +112,87 @@ exports.postEditItem = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).render('user/editItemView', {
-      pageTitle:  'Edit Item',
-      path:       '/user/edit-item',
+    return res.status(422).render('user/editTaskView', {
+      pageTitle:  'Edit Task',
+      path:       '/user/edit-task',
       hasError:   true,
-      item: {
+      task: {
         title:        updatedTitle,
         price:        updatedPrice,
         description:  updatedDesc,
-        _id:          itemId
+        _id:          taskId
       },
       errorMessage:     errors.array()[0].msg,
       validationErrors: errors.array()
     });
   }
 
-  Item.findById(itemId).then(item => {
-      if (item.userId.toString() !== req.user._id.toString()) {
+  Task.findById(taskId).then(task => {
+      if (task.userId.toString() !== req.user._id.toString()) {
         return res.redirect('/');
       }
 
-      item.title        = updatedTitle;
-      item.price        = updatedPrice;
-      item.description  = updatedDesc;
-      item.imageUrl     = updatedImageUrl;
-      return item.save().then(result => {
-        res.redirect('/user/item-list');
+      task.title        = updatedTitle;
+      task.price        = updatedPrice;
+      task.description  = updatedDesc;
+      task.imageUrl     = updatedImageUrl;
+      return task.save().then(result => {
+        res.redirect('/user/task-list');
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postEditItem ERROR: ', error);
+      console.log('postEditTask ERROR: ', error);
       return next(error);
     });
 };
 
-exports.getItemsView = (req, res, next) => {
-  Item.find({ userId: req.user._id }).then(items => {
-      res.render('user/itemsView', {
-        items: items,
-        pageTitle: 'User Items',
-        path: '/user/item-list'
+exports.getTasksView = (req, res, next) => {
+  Task.find({ userId: req.user._id }).then(tasks => {
+      res.render('user/tasksView', {
+        tasks: tasks,
+        pageTitle: 'User Tasks',
+        path: '/user/task-list'
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getItemsView ERROR: ', error);
+      console.log('getTasksView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.deleteItem = (req, res, next) => {
-  const itemId = req.params.itemId;
-  Item.findById(itemId).then(item => {
-      if (!item) {
-        console.log('deleteItem ERROR: ', item);
-        return next(new Error('Item not found.'));
+exports.deleteTask = (req, res, next) => {
+  const taskId = req.params.taskId;
+  Task.findById(taskId).then(task => {
+      if (!task) {
+        console.log('deleteTask ERROR: ', task);
+        return next(new Error('Task not found.'));
       }
-      return Item.deleteOne({ _id: itemId, userId: req.user._id });
+      return Task.deleteOne({ _id: taskId, userId: req.user._id });
     })
     .then(() => {
       res.status(200).json({ message: 'Success' });
     })
     .catch(err => {
-      res.status(500).json({ message: 'Item delete failed' });
+      res.status(500).json({ message: 'Task delete failed' });
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('deleteItem ERROR: ', error);
+      console.log('deleteTask ERROR: ', error);
       return next(error);
     });
 };
 
 exports.getCartView = (req, res, next) => {
-  req.user.populate('cart.items.itemId').execPopulate().then(user => {
-      const items = user.cart.items;
-      if (!items) {return next();};
+  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.cart.tasks;
+      if (!tasks) {return next();};
       res.render('user/cartView', {
         path: '/user/cart',
         pageTitle: 'Cart',
-        items: items
+        tasks: tasks
       });
     })
     .catch(err => {
@@ -204,9 +204,9 @@ exports.getCartView = (req, res, next) => {
 };
 
 exports.postCart = (req, res, next) => {
-  const itemId = req.body.itemId;
-  Item.findById(itemId).then(item => {
-      return req.user.addToCart(item);
+  const taskId = req.body.taskId;
+  Task.findById(taskId).then(task => {
+      return req.user.addToCart(task);
     })
     .then(result => {
       res.redirect('/user/cart');
@@ -219,15 +219,15 @@ exports.postCart = (req, res, next) => {
     });
 };
 
-exports.postRemoveCartItem = (req, res, next) => {
-  const cartItemId = req.body.itemId;
-  req.user.removeFromCart(cartItemId).then(result => {
+exports.postRemoveCartTask = (req, res, next) => {
+  const cartTaskId = req.body.taskId;
+  req.user.removeFromCart(cartTaskId).then(result => {
       res.redirect('/user/cart');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postRemoveCartItem ERROR: ', error);
+      console.log('postRemoveCartTask ERROR: ', error);
       return next(error);
     });
 };
@@ -249,11 +249,11 @@ exports.getOrdersView = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.user.populate('cart.items.itemId').execPopulate().then(user => {
-      const items = user.cart.items.map(item => {
+  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.cart.tasks.map(task => {
         return {
-          quantity: item.quantity,
-          item: { ...item.itemId._doc }
+          quantity: task.quantity,
+          task: { ...task.taskId._doc }
         };
       });
       const order = new Order({
@@ -261,7 +261,7 @@ exports.postOrder = (req, res, next) => {
           email:  req.user.email,
           userId: req.user
         },
-        items: items
+        tasks: tasks
       });
       return order.save();
     })
@@ -280,23 +280,23 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getCheckoutView = (req, res, next) => {
-  let items;
+  let tasks;
   let totalPrice = 0;
-  req.user.populate('cart.items.itemId').execPopulate().then(user => {
-      items       = user.cart.items;
+  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
+      tasks       = user.cart.tasks;
       totalPrice  = 0.00;
-      items.forEach(item => {
-        totalPrice += item.quantity * item.itemId.price;
+      tasks.forEach(task => {
+        totalPrice += task.quantity * task.taskId.price;
       });
       return stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items:           items.map(item => {
+        line_items:           tasks.map(task => {
           return {
-            name:         item.itemId.title,
-            description:  item.itemId.description,
-            amount:       Math.round(item.itemId.price.toFixed(2)*100),
+            name:         task.taskId.title,
+            description:  task.taskId.description,
+            amount:       Math.round(task.taskId.price.toFixed(2)*100),
             currency:     'usd',
-            quantity:     item.quantity
+            quantity:     task.quantity
           };
         }),
         success_url:        req.protocol + '://' + req.get('host') + '/user/checkout/success',
@@ -307,7 +307,7 @@ exports.getCheckoutView = (req, res, next) => {
       res.render('user/checkoutView', {
         path:       '/user/checkout',
         pageTitle:  'Checkout',
-        items:      items,
+        tasks:      tasks,
         totalSum:   totalPrice,
         sessionId:  session.id
       });
@@ -321,11 +321,11 @@ exports.getCheckoutView = (req, res, next) => {
 };
 
 exports.getCheckoutSuccess = (req, res, next) => {
-  req.user.populate('cart.items.itemId').execPopulate().then(user => {
-      const items = user.cart.items.map(item => {
+  req.user.populate('cart.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.cart.tasks.map(task => {
         return {
-          quantity:   item.quantity,
-          item:       { ...item.itemId._doc }
+          quantity:   task.quantity,
+          task:       { ...task.taskId._doc }
         };
       });
       const order = new Order({
@@ -333,7 +333,7 @@ exports.getCheckoutSuccess = (req, res, next) => {
           email:  req.user.email,
           userId: req.user
         },
-        items:    items
+        tasks:    tasks
       });
       return order.save();
     })

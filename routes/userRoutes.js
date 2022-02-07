@@ -9,37 +9,37 @@ const userController  = require(APP_CWD + '/controllers/userController');
 const authController  = require(APP_CWD + '/controllers/authController');
 
 // USER ITEMS
-router.get  ('/user/item-list',           authController.isLogedIn, userController.getItemsView);
-router.get  ('/user/add-item',            authController.isLogedIn, userController.getAddItemView);
-router.get  ('/user/edit-item/:itemId',   authController.isLogedIn, userController.getEditItemView);
+router.get  ('/user/task-list',           authController.isLogedIn, userController.getTasksView);
+router.get  ('/user/add-task',            authController.isLogedIn, userController.getAddTaskView);
+router.get  ('/user/edit-task/:taskId',   authController.isLogedIn, userController.getEditTaskView);
 
-router.post ('/user/add-item',
+router.post ('/user/add-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
     body('price').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,
-  userController.postAddItem
+  userController.postAddTask
 );
 
-router.post ('/user/edit-item',
+router.post ('/user/edit-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
     body('price').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,
-  userController.postEditItem
+  userController.postEditTask
 );
 
-router.delete ('/user/delete-item/:itemId', authController.isLogedIn, userController.deleteItem);
+router.delete ('/user/delete-task/:taskId', authController.isLogedIn, userController.deleteTask);
 
 // USER CART
 router.get    ('/user/cart',               authController.isLogedIn, userController.getCartView);
 
 router.post   ('/user/cart',               authController.isLogedIn, userController.postCart);
-router.post   ('/user/cart-delete-item',   authController.isLogedIn, userController.postRemoveCartItem);
+router.post   ('/user/cart-delete-task',   authController.isLogedIn, userController.postRemoveCartTask);
 
 // USER CHECKOUT
 router.get    ('/user/checkout',           authController.isLogedIn, userController.getCheckoutView);

@@ -6,12 +6,12 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <ul class="cart__item-list">
-                <% items.forEach(item => { %>
-                    <li class="cart__item">
-                        <h1><%= item.itemId.title %></h1>
-                        <h2>Price: <%= item.itemId.price %></h2>
-                        <h2>Quantity: <%= item.quantity %></h2>
+            <ul class="cart__task-list">
+                <% tasks.forEach(task => { %>
+                    <li class="cart__task">
+                        <h1><%= task.taskId.title %></h1>
+                        <h2>Price: <%= task.taskId.price %></h2>
+                        <h2>Quantity: <%= task.quantity %></h2>
                     </li>
                 <% }) %>
             </ul>

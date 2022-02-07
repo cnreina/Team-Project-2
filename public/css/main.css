@@ -51,20 +51,20 @@ form {
   justify-content: space-between;
 }
 
-.main-header__item-list {
+.main-header__task-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
 }
 
-.main-header__item {
+.main-header__task {
   margin: 0 1rem;
   padding: 0;
 }
 
-.main-header__item a,
-.main-header__item button {
+.main-header__task a,
+.main-header__task button {
   font: inherit;
   background: transparent;
   border: none;
@@ -73,14 +73,14 @@ form {
   cursor: pointer;
 }
 
-.main-header__item a:hover,
-.main-header__item button:hover {
+.main-header__task a:hover,
+.main-header__task button:hover {
   color: #ffeb90;
 }
 
-.main-header__item a:active,
-.main-header__item a.active,
-.main-header__item button:active {
+.main-header__task a:active,
+.main-header__task a.active,
+.main-header__task button:active {
   color: #ffd13b;
 }
 
@@ -102,7 +102,7 @@ form {
   transform: translateX(0);
 }
 
-.mobile-nav__item-list {
+.mobile-nav__task-list {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -110,13 +110,13 @@ form {
   padding: 0;
 }
 
-.mobile-nav__item {
+.mobile-nav__task {
   margin: 1rem;
   padding: 0;
 }
 
-.mobile-nav__item a,
-.mobile-nav__item button {
+.mobile-nav__task a,
+.mobile-nav__task button {
   font: inherit;
   text-decoration: none;
   color: black;
@@ -127,11 +127,11 @@ form {
   cursor: pointer;
 }
 
-.mobile-nav__item a:active,
-.mobile-nav__item a:hover,
-.mobile-nav__item a.active,
-.mobile-nav__item button:hover,
-.mobile-nav__item button:active {
+.mobile-nav__task a:active,
+.mobile-nav__task a:hover,
+.mobile-nav__task a.active,
+.mobile-nav__task button:hover,
+.mobile-nav__task button:active {
   background: #b4a304;
   color: white;
   border-radius: 3px;
@@ -187,7 +187,7 @@ form {
   text-align: left;
 }
 
-.invoice__item {
+.invoice__task {
   padding: 0;
   margin: 0;
   text-align: left;

@@ -6,37 +6,37 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <% if (items.length > 0) { %>
+            <% if (tasks.length > 0) { %>
                 <div class="grid">
-                    <% for (let item of items) { %>
-                        <article class="card item-item">
+                    <% for (let task of tasks) { %>
+                        <article class="card task-task">
                             <header class="card__header">
-                                <h1 class="item__title">
-                                    <%= item.title %>
+                                <h1 class="task__title">
+                                    <%= task.title %>
                                 </h1>
                             </header>
                             <div class="card__image">
-                                <img src="<%= item.imageUrl %>" alt="<%= item.title %>">
+                                <img src="<%= task.imageUrl %>" alt="<%= task.title %>">
                             </div>
                             <div class="card__content">
-                                <h2 class="item__price">$
-                                    <%= item.price %>
+                                <h2 class="task__price">$
+                                    <%= task.price %>
                                 </h2>
-                                <p class="item__description">
-                                    <%= item.description %>
+                                <p class="task__description">
+                                    <%= task.description %>
                                 </p>
                             </div>
                             <div class="card__actions">
-                                <a href="/user/edit-item/<%= item._id %>" class="btn">Edit</a>
-                                <input type="hidden" value="<%= item._id %>" name="itemId">
+                                <a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a>
+                                <input type="hidden" value="<%= task._id %>" name="taskId">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <button class="btn" type="button" onclick="deleteItem(this)">Delete</button>
+                                <button class="btn" type="button" onclick="deleteTask(this)">Delete</button>
                             </div>
                         </article>
                         <% } %>
                 </div>
                 <% } else { %>
-                    <h1>No items found</h1>
+                    <h1>No tasks found</h1>
                     <% } %>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>
