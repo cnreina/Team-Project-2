@@ -175,19 +175,19 @@ form {
   align-items: stretch;
 }
 
-/* .invoice {
+/* .archivedTask {
   margin: 5px;
   padding-left: 10px;
   text-align: left;
 }
 
-.invoice__content {
+.archivedTask__content {
   padding: 15px;
   margin: 10px;
   text-align: left;
 }
 
-.invoice__task {
+.archivedTask__task {
   padding: 0;
   margin: 0;
   text-align: left;

@@ -7,14 +7,14 @@
                 <a class="<%= path === '/' ? 'active' : '' %>" href="/">Home</a>
             </li>
             <li class="main-header__task">
-                <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Share</a>
+                <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Shared Tasks</a>
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">TimeTracker</a>
+                    <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">Time Tracker</a>
                 </li>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archive</a>
+                    <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
                 </li>
                 <li class="main-header__task">
                     <a class="<%= path === '/user/add-task' ? 'active' : '' %>" href="/user/add-task">Add Task
@@ -52,14 +52,14 @@
             <a class="<%= path === '/' ? 'active' : '' %>" href="/">Home</a>
         </li>
         <li class="mobile-nav__task">
-            <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Share</a>
+            <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Shared Tasks</a>
         </li>
         <% if (isAuthenticated) { %>
             <li class="mobile-nav__task">
-                <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">TimeTracker</a>
+                <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">Time Tracker</a>
             </li>
             <li class="mobile-nav__task">
-                <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archive</a>
+                <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
             </li>
             <li class="mobile-nav__task">
                 <a class="<%= path === '/user/add-task' ? 'active' : '' %>" href="/user/add-task">Add Task

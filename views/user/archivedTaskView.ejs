@@ -8,14 +8,14 @@
             <% if (!archive) { %>
                 <h1>Archive Not Found</h1>
             <% } else { %>
-                <div class="invoiceContainer">
-                    <h1>Invoice</h1>
+                <div class="archivedTaskContainer">
+                    <h1>Archived Task</h1>
                     <hr>
                     <div>
                         <% dateString = new Date(archive.createdAt).toDateString() %>
                         <h4>Archive: <%= archive._id%></h4>
                         <h4>Date: <%= dateString %></h4>
-                        <table id="invoiceTable">
+                        <table id="archivedTaskTable">
                             <tbody>
                                 <tr>
                                     <th>Task</th>

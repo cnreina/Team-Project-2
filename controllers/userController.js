@@ -351,20 +351,20 @@ exports.getCheckoutSuccess = (req, res, next) => {
     });
 };
 
-exports.getInvoiceView = (req, res, next) => {
+exports.getArchivedTaskView = (req, res, next) => {
   const archiveId = req.params.archiveId;
   Archive.findById(archiveId).then(archive => {
     if (!archive) {
-      console.log('getInvoiceView ERROR: ', archive);
+      console.log('getArchivedTaskView ERROR: ', archive);
       return next(new Error('Archive not found'));
     }
     if (archive.user.userId.toString() !== req.user._id.toString()) {
-      console.log('getInvoiceView ERROR: Unauthorized');
+      console.log('getArchivedTaskView ERROR: Unauthorized');
       return next(new Error('Unauthorized'));
     }
     
-    res.render('user/invoiceView', {
-      pageTitle:        'Invoice',
+    res.render('user/archivedTaskView', {
+      pageTitle:        'ArchivedTask',
       path:             '/user/archive',
       archive:            archive,
       hasError:         false,
