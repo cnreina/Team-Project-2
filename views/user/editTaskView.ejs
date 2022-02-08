@@ -24,14 +24,14 @@
                     <input type="text" name="imageUrl" id="imageUrl" value="<% if (!hasError) { %><%= task.imageUrl %><% } %>">
                 </div>
                 <div class="form-control">
-                    <label for="price">Price</label>
+                    <label for="totaltime">Total Time</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'price') ? 'invalid' : '' %>"
+                        class="<%= validationErrors.find(e => e.param === 'totaltime') ? 'invalid' : '' %>"
                         type="number" 
-                        name="price" 
-                        id="price" 
+                        name="totaltime" 
+                        id="totaltime" 
                         step="0.01" 
-                        value="<% if (!hasError) { %><%= task.price %><% } %>">
+                        value="<% if (!hasError) { %><%= task.totaltime %><% } %>">
                 </div>
                 <div class="form-control">
                     <label for="description">Description</label>

@@ -16,7 +16,7 @@ router.get  ('/user/edit-task/:taskId',   authController.isLogedIn, userControll
 router.post ('/user/add-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
-    body('price').isFloat(),
+    body('totaltime').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,
@@ -26,7 +26,7 @@ router.post ('/user/add-task',
 router.post ('/user/edit-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
-    body('price').isFloat(),
+    body('totaltime').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,

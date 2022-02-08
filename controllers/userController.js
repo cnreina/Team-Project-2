@@ -27,7 +27,7 @@ exports.getAddTaskView = (req, res, next) => {
 exports.postAddTask = (req, res, next) => {
   const title       = req.body.title;
   const imageUrl    = req.body.imageUrl;
-  const price       = req.body.price;
+  const totaltime       = req.body.totaltime;
   const description = req.body.description;
   if (!imageUrl) {
     return res.status(422).render('user/addTaskView', {
@@ -36,7 +36,7 @@ exports.postAddTask = (req, res, next) => {
       hasError: true,
       Task: {
         title: title,
-        price: price,
+        totaltime: totaltime,
         description: description
       },
       errorMessage: 'ERROR: Image Url is required',
@@ -53,7 +53,7 @@ exports.postAddTask = (req, res, next) => {
       hasError: true,
       Task: {
         title: title,
-        price: price,
+        totaltime: totaltime,
         description: description
       },
       errorMessage: errors.array()[0].msg,
@@ -63,7 +63,7 @@ exports.postAddTask = (req, res, next) => {
 
   const task = new Task({
     title:        title,
-    price:        price,
+    totaltime:        totaltime,
     description:  description,
     imageUrl:     imageUrl,
     userId:       req.user
@@ -106,7 +106,7 @@ exports.getEditTaskView = (req, res, next) => {
 exports.postEditTask = (req, res, next) => {
   const taskId            = req.body.taskId;
   const updatedTitle      = req.body.title;
-  const updatedPrice      = req.body.price;
+  const updatedTotalTime  = req.body.totaltime;
   const updatedImageUrl   = req.body.imageUrl;
   const updatedDesc       = req.body.description;
 
@@ -118,7 +118,7 @@ exports.postEditTask = (req, res, next) => {
       hasError:   true,
       task: {
         title:        updatedTitle,
-        price:        updatedPrice,
+        totaltime:        updatedTotalTime,
         description:  updatedDesc,
         _id:          taskId
       },
@@ -133,7 +133,7 @@ exports.postEditTask = (req, res, next) => {
       }
 
       task.title        = updatedTitle;
-      task.price        = updatedPrice;
+      task.totaltime        = updatedTotalTime;
       task.description  = updatedDesc;
       task.imageUrl     = updatedImageUrl;
       return task.save().then(result => {
@@ -281,12 +281,12 @@ exports.postArchive = (req, res, next) => {
 
 exports.getCheckoutView = (req, res, next) => {
   let tasks;
-  let totalPrice = 0;
+  let totalTime = 0;
   req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
       tasks       = user.timetracker.tasks;
-      totalPrice  = 0.00;
+      totalTime  = 0.00;
       tasks.forEach(task => {
-        totalPrice += task.quantity * task.taskId.price;
+        totalTime += task.quantity * task.taskId.totaltime;
       });
       return stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -294,7 +294,7 @@ exports.getCheckoutView = (req, res, next) => {
           return {
             name:         task.taskId.title,
             description:  task.taskId.description,
-            amount:       Math.round(task.taskId.price.toFixed(2)*100),
+            amount:       Math.round(task.taskId.totaltime.toFixed(2)*100),
             currency:     'usd',
             quantity:     task.quantity
           };
@@ -308,7 +308,7 @@ exports.getCheckoutView = (req, res, next) => {
         path:       '/user/checkout',
         pageTitle:  'Checkout',
         tasks:      tasks,
-        totalSum:   totalPrice,
+        totalSum:   totalTime,
         sessionId:  session.id
       });
     })

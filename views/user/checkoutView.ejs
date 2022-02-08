@@ -10,7 +10,7 @@
                 <% tasks.forEach(task => { %>
                     <li class="timetracker__task">
                         <h1><%= task.taskId.title %></h1>
-                        <h2>Price: <%= task.taskId.price %></h2>
+                        <h2>Total Time: <%= task.taskId.totaltime %></h2>
                         <h2>Quantity: <%= task.quantity %></h2>
                     </li>
                 <% }) %>

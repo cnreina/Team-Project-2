@@ -6,7 +6,7 @@ const TaskSchema = new Schema({
     type: String,
     required: true
   },
-  price: {
+  totaltime: {
     type: Number,
     required: true
   },
