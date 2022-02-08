@@ -8,7 +8,7 @@ const router          = express.Router();
 const userController  = require(APP_CWD + '/controllers/userController');
 const authController  = require(APP_CWD + '/controllers/authController');
 
-// USER ITEMS
+// USER TASKS
 router.get  ('/user/task-list',           authController.isLogedIn, userController.getTasksView);
 router.get  ('/user/add-task',            authController.isLogedIn, userController.getAddTaskView);
 router.get  ('/user/edit-task/:taskId',   authController.isLogedIn, userController.getEditTaskView);
@@ -35,7 +35,7 @@ router.post ('/user/edit-task',
 
 router.delete ('/user/delete-task/:taskId', authController.isLogedIn, userController.deleteTask);
 
-// USER CART
+// USER TIME TRACKER
 router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);
 
 router.post   ('/user/timetracker',               authController.isLogedIn, userController.postTimeTracker);
@@ -46,7 +46,7 @@ router.get    ('/user/checkout',           authController.isLogedIn, userControl
 router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
-// USER ORDERS
+// USER ARCHIVE
 router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
 router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getInvoiceView);
 

@@ -27,7 +27,7 @@
                                 </p>
                             </div>
                             <div class="card__actions">
-                                <a href="/store/task-list/<%= task._id %>" class="btn">Details</a>
+                                <a href="/share/task-list/<%= task._id %>" class="btn">Details</a>
                                 <% if (isAuthenticated) { %>
                                     <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
                                 <% } %>

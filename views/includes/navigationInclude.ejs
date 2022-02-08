@@ -7,7 +7,7 @@
                 <a class="<%= path === '/' ? 'active' : '' %>" href="/">Home</a>
             </li>
             <li class="main-header__task">
-                <a class="<%= path === '/store/task-list' ? 'active' : '' %>" href="/store/task-list">Store</a>
+                <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Share</a>
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__task">
@@ -52,7 +52,7 @@
             <a class="<%= path === '/' ? 'active' : '' %>" href="/">Home</a>
         </li>
         <li class="mobile-nav__task">
-            <a class="<%= path === '/store/task-list' ? 'active' : '' %>" href="/store/task-list">Store</a>
+            <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Share</a>
         </li>
         <% if (isAuthenticated) { %>
             <li class="mobile-nav__task">

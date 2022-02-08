@@ -10,10 +10,10 @@ exports.getTasksView = (req, res, next) => {
       return Task.find().skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
     })
     .then(tasks => {
-      res.render('store/tasksView', {
+      res.render('share/tasksView', {
         tasks: tasks,
         pageTitle: 'Tasks',
-        path: '/store/task-list',
+        path: '/share/task-list',
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalTasks,
         hasPreviousPage: page > 1,
@@ -34,10 +34,10 @@ exports.getTaskView = (req, res, next) => {
   const taskId = req.params.taskId;
   Task.findById(taskId)
     .then(task => {
-      res.render('store/taskDetailView', {
+      res.render('share/taskDetailView', {
         task: task,
         pageTitle: task.title,
-        path: '/store/task-list'
+        path: '/share/task-list'
       });
     })
     .catch(err => {
