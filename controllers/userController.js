@@ -26,10 +26,10 @@ exports.getAddTaskView = (req, res, next) => {
 
 exports.postAddTask = (req, res, next) => {
   const title       = req.body.title;
-  const imageUrl    = req.body.imageUrl;
-  const totaltime       = req.body.totaltime;
+  const timestart   = req.body.timestart;
+  const totaltime   = req.body.totaltime;
   const description = req.body.description;
-  if (!imageUrl) {
+  if (!timestart) {
     return res.status(422).render('user/addTaskView', {
       pageTitle: 'Add Task',
       path: '/user/add-task',
@@ -39,7 +39,7 @@ exports.postAddTask = (req, res, next) => {
         totaltime: totaltime,
         description: description
       },
-      errorMessage: 'ERROR: Image Url is required',
+      errorMessage: 'ERROR: Time Start is required',
       validationErrors: []
     });
   }
@@ -63,9 +63,9 @@ exports.postAddTask = (req, res, next) => {
 
   const task = new Task({
     title:        title,
-    totaltime:        totaltime,
+    totaltime:    totaltime,
     description:  description,
-    imageUrl:     imageUrl,
+    timestart:    timestart,
     userId:       req.user
   });
   task.save().then(result => {
@@ -107,7 +107,7 @@ exports.postEditTask = (req, res, next) => {
   const taskId            = req.body.taskId;
   const updatedTitle      = req.body.title;
   const updatedTotalTime  = req.body.totaltime;
-  const updatedImageUrl   = req.body.imageUrl;
+  const updatedTimeStart  = req.body.timestart;
   const updatedDesc       = req.body.description;
 
   const errors = validationResult(req);
@@ -118,7 +118,7 @@ exports.postEditTask = (req, res, next) => {
       hasError:   true,
       task: {
         title:        updatedTitle,
-        totaltime:        updatedTotalTime,
+        totaltime:    updatedTotalTime,
         description:  updatedDesc,
         _id:          taskId
       },
@@ -133,9 +133,9 @@ exports.postEditTask = (req, res, next) => {
       }
 
       task.title        = updatedTitle;
-      task.totaltime        = updatedTotalTime;
+      task.totaltime    = updatedTotalTime;
       task.description  = updatedDesc;
-      task.imageUrl     = updatedImageUrl;
+      task.timestart    = updatedTimeStart;
       return task.save().then(result => {
         res.redirect('/user/task-list');
       });

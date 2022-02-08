@@ -14,8 +14,8 @@ const TaskSchema = new Schema({
     type: String,
     required: true
   },
-  imageUrl: {
-    type: String,
+  timestart: {
+    type: Date,
     required: true
   },
   userId: {
