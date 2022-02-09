@@ -31,7 +31,7 @@ router.post ('/user/edit-task',
   userController.postEditTask
 );
 
-router.delete ('/user/delete-task/:taskId', authController.isLogedIn, userController.deleteTask);
+router.post ('/user/archive-task', authController.isLogedIn, userController.archiveTask);
 
 // USER TIME TRACKER
 router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);

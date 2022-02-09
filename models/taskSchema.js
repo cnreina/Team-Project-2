@@ -22,6 +22,10 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  archived: {
+    type: Boolean,
+    required: true
   }
 },
 { timestamps: true }

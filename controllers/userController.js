@@ -48,7 +48,8 @@ exports.postAddTask = (req, res, next) => {
     title:        title,
     totaltime:    0,
     description:  description,
-    userId:       req.user
+    userId:       req.user,
+    archived: false,
   });
   task.save().then(result => {
       res.redirect('/user/task-list');
@@ -131,7 +132,7 @@ exports.postEditTask = (req, res, next) => {
 };
 
 exports.getTasksView = (req, res, next) => {
-  Task.find({ userId: req.user._id }).then(tasks => {
+  Task.find({ userId: req.user._id, archived: false }).then(tasks => {
       res.render('user/tasksView', {
         tasks: tasks,
         pageTitle: 'User Tasks',
@@ -146,25 +147,33 @@ exports.getTasksView = (req, res, next) => {
     });
 };
 
-exports.deleteTask = (req, res, next) => {
-  const taskId = req.params.taskId;
+exports.archiveTask = (req, res, next) => {
+  console.log('archiving task');
+  const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      if (!task) {
-        console.log('deleteTask ERROR: ', task);
-        return next(new Error('Task not found.'));
-      }
-      return Task.deleteOne({ _id: taskId, userId: req.user._id });
-    })
-    .then(() => {
-      res.status(200).json({ message: 'Success' });
+    console.log(task.archived);
+    if(task.archived) {
+      const error = new Error('ERROR: Task already archived');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    task.archived = true;
+    task.save()
+    .then(result => {
+      console.log('Task succesfully archived!');
+      res.redirect('/user/archive');
     })
     .catch(err => {
-      res.status(500).json({ message: 'Task delete failed' });
-      const error = new Error(err);
+      console.log(err)
+    })
+  })
+  .catch(err => {
+    const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('deleteTask ERROR: ', error);
+      console.log('Archive Task ERROR: ', error);
       return next(error);
-    });
+  })
 };
 
 exports.getTimeTrackerView = (req, res, next) => {
