@@ -37,7 +37,8 @@ exports.postAddTask = (req, res, next) => {
       hasError: true,
       Task: {
         title: title,
-        description: description
+        description: description,
+
       },
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array()
@@ -148,10 +149,8 @@ exports.getTasksView = (req, res, next) => {
 };
 
 exports.archiveTask = (req, res, next) => {
-  console.log('archiving task');
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-    console.log(task.archived);
     if(task.archived) {
       const error = new Error('ERROR: Task already archived');
       error.httpStatusCode = 500;
@@ -161,8 +160,42 @@ exports.archiveTask = (req, res, next) => {
     task.archived = true;
     task.save()
     .then(result => {
-      console.log('Task succesfully archived!');
-      res.redirect('/user/archive');
+      console.log('archiving task');
+      Archive.findOne({'user.userId': req.user._id,}).then(archive => {
+        console.log('finding archive');
+        console.log(archive);
+        if (!archive) {
+          console.log('no archive found, creating new archive.')
+          const newArchive = new Archive({
+            user: {
+              email: req.user.email,
+              userId: req.user._id
+            },
+            tasks: [task]
+          });
+          newArchive.save().then(result => {
+            console.log(result);
+            console.log('new archive created, task saved to archive!')
+            return res.redirect('/user/archive');
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        }
+        console.log('archive found, saving task.')
+        archive.tasks.push(task);
+        archive.save().then(result => {
+          console.log('task saved to archive!')
+          console.log(result);
+          return res.redirect('/user/archive');
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      })
+      .catch(err => {
+
+      })
     })
     .catch(err => {
       console.log(err)

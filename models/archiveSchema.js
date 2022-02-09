@@ -12,12 +12,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ArchiveSchema = new Schema({
-  tasks: [
-    {
-      task: { type: Object, required: true },
-      quantity: { type: Number, required: true }
-    }
-  ],
+  tasks: {
+    type: Object,
+    required: true,
+  },
   user: {
     email: {
       type: String,
