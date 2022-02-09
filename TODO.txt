@@ -8,7 +8,15 @@ dev environment and gitignore setup
 
 ADD
 -------------------------------------------
-
+Remove timetracker page
+change delete to archive
+update archive page edit, delete, and make active buttons on each activity.
+punch in functionality
+punch out functionality
+refactor add task page
+refactor shared task page
+time refresh button
+active task indicator
 
 
 
