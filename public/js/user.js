@@ -23,7 +23,7 @@ const deleteTask = btn => {
 const punchIn = btn => {
   const taskId      = btn.parentNode.querySelector('[name=taskId]').value;
   const csrf        = btn.parentNode.querySelector('[name=_csrf]').value;
-  const taskElement = btn.closest('article');
+  const taskElement = btn.closest('ul');
 
   fetch('/user/punchin/' + taskId, {
     method: 'POST',
