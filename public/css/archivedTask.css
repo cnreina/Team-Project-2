@@ -1,17 +1,17 @@
-.invoiceContainer {
+.archivedTaskContainer {
   width: 100%;
   margin: 0;
   padding: 2vw;
 }
 
-#invoiceTable {
+#archivedTaskTable {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
   margin: 0;
 }
 
-#invoiceTable th {
+#archivedTaskTable th {
   padding-top:      12px;
   padding-bottom:   12px;
   text-align:       left;
@@ -19,17 +19,17 @@
   color:            white;
 }
 
-#invoiceTable td, #invoiceTable th {
+#archivedTaskTable td, #archivedTaskTable th {
   border: 1px solid #ddd;
   padding: 8px;
   width: 25%;
 }
 
-#invoiceTable tr:nth-child(even){
+#archivedTaskTable tr:nth-child(even){
   background-color: #f2f2f2;
 }
 
-#invoiceTable tr:hover {
+#archivedTaskTable tr:hover {
   background-color: #ddd;
 }
 
@@ -42,19 +42,19 @@
       background-color: white;
     }
 
-    .invoiceContainer {
+    .archivedTaskContainer {
       width: 100%;
       margin: 0;
       padding: 1vw;
     }
 
-    #invoiceTable {
+    #archivedTaskTable {
       width: 100% !important;
       padding: 0 !important;
       margin: 0 !important;
     }
 
-    #invoiceTable th {
+    #archivedTaskTable th {
       padding-top:      10px;
       padding-bottom:   10px;
       text-align:       left;
@@ -62,7 +62,7 @@
       color:            rgb(8, 8, 8);
     }
 
-    #invoiceTable tr:nth-child(even){
+    #archivedTaskTable tr:nth-child(even){
       background-color: white;
     }
 

@@ -13,12 +13,12 @@ const UserSchema = new Schema({
   },
   resetToken: String,
   resetTokenExpiration: Date,
-  cart: {
-    items: [
+  timetracker: {
+    tasks: [
       {
-        itemId: {
+        taskId: {
           type: Schema.Types.ObjectId,
-          ref: 'Item',
+          ref: 'Task',
           required: true
         },
         quantity: { type: Number, required: true }
@@ -29,39 +29,39 @@ const UserSchema = new Schema({
 { timestamps: true }
 );
 
-UserSchema.methods.addToCart = function(item) {
-  const cartItemIndex = this.cart.items.findIndex(cartItem => {
-    return cartItem.itemId.toString() === item._id.toString();
+UserSchema.methods.addToTimeTracker = function(task) {
+  const timetrackerTaskIndex = this.timetracker.tasks.findIndex(timetrackerTask => {
+    return timetrackerTask.taskId.toString() === task._id.toString();
   });
   let newQuantity = 1;
-  const updatedCartItems = [...this.cart.items];
+  const updatedTimeTrackerTasks = [...this.timetracker.tasks];
 
-  if (cartItemIndex >= 0) {
-    newQuantity = this.cart.items[cartItemIndex].quantity + 1;
-    updatedCartItems[cartItemIndex].quantity = newQuantity;
+  if (timetrackerTaskIndex >= 0) {
+    newQuantity = this.timetracker.tasks[timetrackerTaskIndex].quantity + 1;
+    updatedTimeTrackerTasks[timetrackerTaskIndex].quantity = newQuantity;
   } else {
-    updatedCartItems.push({
-      itemId: item._id,
+    updatedTimeTrackerTasks.push({
+      taskId: task._id,
       quantity: newQuantity
     });
   }
-  const updatedCart = {
-    items: updatedCartItems
+  const updatedTimeTracker = {
+    tasks: updatedTimeTrackerTasks
   };
-  this.cart = updatedCart;
+  this.timetracker = updatedTimeTracker;
   return this.save();
 };
 
-UserSchema.methods.removeFromCart = function(itemId) {
-  const updatedCartItems = this.cart.items.filter(item => {
-    return item.itemId.toString() !== itemId.toString();
+UserSchema.methods.removeFromTimeTracker = function(taskId) {
+  const updatedTimeTrackerTasks = this.timetracker.tasks.filter(task => {
+    return task.taskId.toString() !== taskId.toString();
   });
-  this.cart.items = updatedCartItems;
+  this.timetracker.tasks = updatedTimeTrackerTasks;
   return this.save();
 };
 
-UserSchema.methods.clearCart = function() {
-  this.cart = { items: [] };
+UserSchema.methods.clearTimeTracker = function() {
+  this.timetracker = { tasks: [] };
   return this.save();
 };
 

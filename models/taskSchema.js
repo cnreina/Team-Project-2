@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
-const ItemSchema = new Schema({
+const TaskSchema = new Schema({
   title: {
     type: String,
     required: true
   },
-  price: {
+  totaltime: {
     type: Number,
     required: true
   },
@@ -15,8 +14,8 @@ const ItemSchema = new Schema({
     type: String,
     required: true
   },
-  imageUrl: {
-    type: String,
+  timestart: {
+    type: Date,
     required: true
   },
   userId: {
@@ -28,4 +27,4 @@ const ItemSchema = new Schema({
 { timestamps: true }
 );
 
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('Task', TaskSchema);
