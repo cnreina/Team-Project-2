@@ -6,30 +6,30 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <% if (items.length > 0) { %>
+            <% if (tasks.length > 0) { %>
                 <div class="grid">
-                    <% for (let item of items) { %>
-                        <article class="card item-item">
+                    <% for (let task of tasks) { %>
+                        <article class="card task-task">
                             <header class="card__header">
-                                <h1 class="item__title">
-                                    <%= item.title %>
+                                <h1 class="task__title">
+                                    <%= task.title %>
                                 </h1>
                             </header>
                             <div class="card__image">
-                                <img src="<%= item.imageUrl %>" alt="<%= item.title %>">
+                                <h2 class="task__totaltime"><%= task.timestart %></h2>
                             </div>
                             <div class="card__content">
-                                <h2 class="item__price">$
-                                    <%= item.price %>
+                                <h2 class="task__totaltime">Time: 
+                                    <%= task.totaltime %>
                                 </h2>
-                                <p class="item__description">
-                                    <%= item.description %>
+                                <p class="task__description">
+                                    <%= task.description %>
                                 </p>
                             </div>
                             <div class="card__actions">
-                                <a href="/store/item-list/<%= item._id %>" class="btn">Details</a>
+                                <a href="/share/task-list/<%= task._id %>" class="btn">Details</a>
                                 <% if (isAuthenticated) { %>
-                                    <%- include('../includes/addToCartInclude.ejs', {item: item}) %>
+                                    <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
                                 <% } %>
                             </div>
                         </article>
@@ -45,7 +45,7 @@
                     })
                 %>
                 <% } else { %>
-                    <h1>No items found</h1>
+                    <h1>No tasks found</h1>
             <% } %>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>

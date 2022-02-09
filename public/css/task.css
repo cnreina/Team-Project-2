@@ -1,28 +1,28 @@
-.item-form {
+.task-form {
     width: 20rem;
     max-width: 90%;
     margin: auto;
     display: block;
 }
 
-.item-item {
+.task-task {
     width: 20rem;
     max-width: 95%;
     margin: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
-.item__title {
+.task__title {
     font-size: 1.2rem;
     text-align: center;
 }
 
-.item__price {
+.task__totaltime {
     text-align: center;
     color: #4d4d4d;
     margin-bottom: 0.5rem;
 }
 
-.item__description {
+.task__description {
     text-align: center;
 }

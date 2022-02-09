@@ -9,13 +9,12 @@
 */
 
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
-  items: [
+const ArchiveSchema = new Schema({
+  tasks: [
     {
-      item: { type: Object, required: true },
+      task: { type: Object, required: true },
       quantity: { type: Number, required: true }
     }
   ],
@@ -34,4 +33,4 @@ const OrderSchema = new Schema({
 { timestamps: true }
 );
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Archive', ArchiveSchema);

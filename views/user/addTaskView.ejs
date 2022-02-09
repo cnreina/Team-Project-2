@@ -9,7 +9,7 @@
             <% if (errorMessage) { %>
                 <div class="user-message user-message--error"><%= errorMessage %></div>
             <% } %>
-            <form class="item-form" action="/user/add-item" method="POST" enctype="multipart/form-data">
+            <form class="task-form" action="/user/add-task" method="POST" enctype="multipart/form-data">
                 <div class="form-control">
                     <label for="title">Title</label>
                     <input 
@@ -20,16 +20,16 @@
                         value="">
                 </div>
                 <div class="form-control">
-                    <label for="imageUrl">Image URL</label>
-                    <input type="text" name="imageUrl" id="imageUrl" value="">
+                    <label for="timestart">Time Start</label>
+                    <input type="text" name="timestart" id="timestart" value="">
                 </div>
                 <div class="form-control">
-                    <label for="price">Price</label>
+                    <label for="totaltime">Total Time</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'price') ? 'invalid' : '' %>"
+                        class="<%= validationErrors.find(e => e.param === 'totaltime') ? 'invalid' : '' %>"
                         type="number" 
-                        name="price" 
-                        id="price" 
+                        name="totaltime" 
+                        id="totaltime" 
                         step="0.01" 
                         value="">
                 </div>
@@ -42,7 +42,7 @@
                         rows="5"></textarea>
                 </div>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button class="btn" type="submit">Add Item</button>
+                <button class="btn" type="submit">Add Task</button>
             </form>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>

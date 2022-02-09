@@ -5,6 +5,7 @@
   Leonardo Souza
 */
 
+// 2016-05-18T16:00:00
 
 require('dotenv').config();
 const express                   = require('express');
@@ -58,7 +59,7 @@ const fileFilter  = (req, file, callBack) => {
 // ROUTES
 const homeRoutes    = require(APP_CWD + '/routes/homeRoutes');
 const userRoutes    = require(APP_CWD + '/routes/userRoutes');
-const storeRoutes   = require(APP_CWD + '/routes/storeRoutes');
+const shareRoutes   = require(APP_CWD + '/routes/shareRoutes');
 const authRoutes    = require(APP_CWD + '/routes/authRoutes');
 
 
@@ -86,7 +87,7 @@ app.use(sessionController.findUserSession);
 app.use(homeRoutes);
 app.use(authRoutes);
 app.use(userRoutes);
-app.use(storeRoutes);
+app.use(shareRoutes);
 
 app.use('/', errorController.get404View);
 

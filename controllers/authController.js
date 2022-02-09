@@ -65,7 +65,7 @@ exports.postSignup = (req, res, next) => {
       const user = new User({
         email:    email,
         password: hashedPassword,
-        cart:     { items: [] }
+        timetracker:     { tasks: [] }
       });
       return user.save();
     })

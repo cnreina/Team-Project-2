@@ -8,46 +8,46 @@ const router          = express.Router();
 const userController  = require(APP_CWD + '/controllers/userController');
 const authController  = require(APP_CWD + '/controllers/authController');
 
-// USER ITEMS
-router.get  ('/user/item-list',           authController.isLogedIn, userController.getItemsView);
-router.get  ('/user/add-item',            authController.isLogedIn, userController.getAddItemView);
-router.get  ('/user/edit-item/:itemId',   authController.isLogedIn, userController.getEditItemView);
+// USER TASKS
+router.get  ('/user/task-list',           authController.isLogedIn, userController.getTasksView);
+router.get  ('/user/add-task',            authController.isLogedIn, userController.getAddTaskView);
+router.get  ('/user/edit-task/:taskId',   authController.isLogedIn, userController.getEditTaskView);
 
-router.post ('/user/add-item',
+router.post ('/user/add-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
-    body('price').isFloat(),
+    body('totaltime').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,
-  userController.postAddItem
+  userController.postAddTask
 );
 
-router.post ('/user/edit-item',
+router.post ('/user/edit-task',
   [
     body('title').isString().isLength({ min: 3 }).trim(),
-    body('price').isFloat(),
+    body('totaltime').isFloat(),
     body('description').isLength({ min: 5, max: 400 }).trim()
   ],
   authController.isLogedIn,
-  userController.postEditItem
+  userController.postEditTask
 );
 
-router.delete ('/user/delete-item/:itemId', authController.isLogedIn, userController.deleteItem);
+router.delete ('/user/delete-task/:taskId', authController.isLogedIn, userController.deleteTask);
 
-// USER CART
-router.get    ('/user/cart',               authController.isLogedIn, userController.getCartView);
+// USER TIME TRACKER
+router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);
 
-router.post   ('/user/cart',               authController.isLogedIn, userController.postCart);
-router.post   ('/user/cart-delete-item',   authController.isLogedIn, userController.postRemoveCartItem);
+router.post   ('/user/timetracker',               authController.isLogedIn, userController.postTimeTracker);
+router.post   ('/user/timetracker-delete-task',   authController.isLogedIn, userController.postRemoveTimeTrackerTask);
 
 // USER CHECKOUT
 router.get    ('/user/checkout',           authController.isLogedIn, userController.getCheckoutView);
 router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
-// USER ORDERS
-router.get    ('/user/orders',              authController.isLogedIn, userController.getOrdersView);
-router.get    ('/user/orders/:orderId',     authController.isLogedIn, userController.getInvoiceView);
+// USER ARCHIVE
+router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
+router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getArchivedTaskView);
 
 module.exports = router;
