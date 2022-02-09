@@ -20,20 +20,6 @@
                         value="">
                 </div>
                 <div class="form-control">
-                    <label for="timestart">Time Start</label>
-                    <input type="text" name="timestart" id="timestart" value="">
-                </div>
-                <div class="form-control">
-                    <label for="totaltime">Total Time</label>
-                    <input 
-                        class="<%= validationErrors.find(e => e.param === 'totaltime') ? 'invalid' : '' %>"
-                        type="number" 
-                        name="totaltime" 
-                        id="totaltime" 
-                        step="0.01" 
-                        value="">
-                </div>
-                <div class="form-control">
                     <label for="description">Description</label>
                     <textarea 
                         class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"

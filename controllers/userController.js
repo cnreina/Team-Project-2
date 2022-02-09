@@ -15,7 +15,7 @@ const Task                  = require(APP_CWD + '/models/taskSchema');
 const Archive                 = require(APP_CWD + '/models/archiveSchema');
 
 exports.getAddTaskView = (req, res, next) => {
-  res.render('user/addTaskView', {
+  res.render('user/add-task', {
     pageTitle: 'Add Task',
     path: '/user/add-task',
     hasError: false,
@@ -26,34 +26,17 @@ exports.getAddTaskView = (req, res, next) => {
 
 exports.postAddTask = (req, res, next) => {
   const title       = req.body.title;
-  const timestart   = req.body.timestart;
-  const totaltime   = req.body.totaltime;
   const description = req.body.description;
-  if (!timestart) {
-    return res.status(422).render('user/addTaskView', {
-      pageTitle: 'Add Task',
-      path: '/user/add-task',
-      hasError: true,
-      Task: {
-        title: title,
-        totaltime: totaltime,
-        description: description
-      },
-      errorMessage: 'ERROR: Time Start is required',
-      validationErrors: []
-    });
-  }
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render('user/addTaskView', {
+    return res.status(422).render('user/add-task', {
       pageTitle: 'Add Task',
       path: '/user/add-task',
       hasError: true,
       Task: {
         title: title,
-        totaltime: totaltime,
         description: description
       },
       errorMessage: errors.array()[0].msg,
@@ -63,9 +46,8 @@ exports.postAddTask = (req, res, next) => {
 
   const task = new Task({
     title:        title,
-    totaltime:    totaltime,
+    totaltime:    0,
     description:  description,
-    timestart:    timestart,
     userId:       req.user
   });
   task.save().then(result => {

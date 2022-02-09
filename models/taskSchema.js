@@ -16,7 +16,7 @@ const TaskSchema = new Schema({
   },
   timestart: {
     type: Date,
-    required: true
+    required: false
   },
   userId: {
     type: Schema.Types.ObjectId,

@@ -5,7 +5,6 @@ dev environment and gitignore setup
 
 
 
-
 ADD
 -------------------------------------------
 Remove timetracker page
@@ -17,8 +16,6 @@ refactor add task page
 refactor shared task page
 time refresh button
 active task indicator
-
-
 
 
 NOTES
