@@ -247,6 +247,52 @@ exports.deleteArchiveTask = (req, res, next) => {
   })
 };
 
+exports.postMakeActive = (req, res, next) => {
+  const taskId = req.body.taskId;
+  const archiveId = req.body.archiveId;
+  Archive.findOne({_id: archiveId})
+  .then(archive => {
+    // Error handling: Archive not found
+    if (!archive) {
+      const error = new Error('ERROR: No such archive');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    // update task list
+    const taskList = archive.tasks;
+    const newTaskList = taskList.filter((value, index, taskList) => {
+      return value.toString() !== taskId.toString();
+    });
+    archive.tasks = newTaskList;
+    // save new archive task list
+    archive.save()
+    .then(result => {
+      // make task not archived
+      Task.findOne({_id: taskId})
+      .then(task => {
+        task.archived = false;
+        task.save()
+        .then(result => {
+          res.redirect('/user/tasks');
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
+
 exports.getTimeTrackerView = (req, res, next) => {
   req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
       const tasks = user.timetracker.tasks;

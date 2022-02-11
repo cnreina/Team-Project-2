@@ -19,9 +19,9 @@
                                     <li class="archive__tasks-task">
                                         <%= task.title %>
                                     </li>
-                                    <li class="timetracker_li">
+                                    <li class="button">
                                         <form action="/user/archive/delete-task" method="POST">
-                                            <button type="submit" class="button">Delete</button>
+                                            <button type="submit">Delete</button>
                                             <input type="hidden" name="taskId" value="<%= task._id %>">
                                             <input type="hidden" name="archiveId" value="<%= archive._id %>">
                                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -30,9 +30,9 @@
                                     <li>
                                         <li class="timetracker_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
                                     </li>
-                                    <li class="timetracker_li">
+                                    <li class="button">
                                         <form action="/user/archive/make-active" method="POST">
-                                            <button type="submit" class="button">Make Active</button>
+                                            <button type="submit" >Make Active</button>
                                             <input type="hidden" name="taskId" value="<%= task._id %>">
                                             <input type="hidden" name="archiveId" value="<%= archive._id %>">
                                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
