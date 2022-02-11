@@ -36,10 +36,10 @@ router.post ('/user/edit-task',
 router.delete ('/user/delete-task/:taskId', authController.isLogedIn, userController.deleteTask);
 
 // USER TIME TRACKER
-router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);
+router.get    ('/user/tasklist',               authController.isLogedIn, userController.getTaskListView);
 
-router.post   ('/user/timetracker',               authController.isLogedIn, userController.postTimeTracker);
-router.post   ('/user/timetracker-delete-task',   authController.isLogedIn, userController.postRemoveTimeTrackerTask);
+router.post   ('/user/tasklist',               authController.isLogedIn, userController.postTaskList);
+router.post   ('/user/tasklist-delete-task',   authController.isLogedIn, userController.postRemoveTaskListTask);
 
 // USER CHECKOUT
 router.get    ('/user/checkout',           authController.isLogedIn, userController.getCheckoutView);

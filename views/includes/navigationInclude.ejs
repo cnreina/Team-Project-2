@@ -11,9 +11,6 @@
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">Time Tracker</a>
-                </li>
-                <li class="main-header__task">
                     <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
                 </li>
                 <li class="main-header__task">
@@ -55,9 +52,6 @@
             <a class="<%= path === '/share/task-list' ? 'active' : '' %>" href="/share/task-list">Shared Tasks</a>
         </li>
         <% if (isAuthenticated) { %>
-            <li class="mobile-nav__task">
-                <a class="<%= path === '/user/timetracker' ? 'active' : '' %>" href="/user/timetracker">Time Tracker</a>
-            </li>
             <li class="mobile-nav__task">
                 <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
             </li>

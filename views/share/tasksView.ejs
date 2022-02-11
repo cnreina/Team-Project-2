@@ -5,49 +5,38 @@
     </head>
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
-        <main>
-            <% if (tasks.length > 0) { %>
-                <div class="grid">
+            <main>
+                <% if (tasks.length> 0) { %>
                     <% for (let task of tasks) { %>
-                        <article class="card task-task">
-                            <header class="card__header">
-                                <h1 class="task__title">
-                                    <%= task.title %>
-                                </h1>
-                            </header>
-                            <div class="card__image">
-                                <h2 class="task__totaltime"><%= task.timestart %></h2>
-                            </div>
-                            <div class="card__content">
-                                <h2 class="task__totaltime">Time: 
-                                    <%= task.totaltime %>
-                                </h2>
-                                <p class="task__description">
-                                    <%= task.description %>
-                                </p>
-                            </div>
-                            <div class="card__actions">
-                                <a href="/share/task-list/<%= task._id %>" class="btn">Details</a>
-                                <% if (isAuthenticated) { %>
-                                    <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
-                                <% } %>
-                            </div>
-                        </article>
+                        <div class="tasklist_div">
+                            <ul class="tasklist_ul">
+
+                                <li class="tasklist_li">
+                                    <h3>
+                                        <%= task.title %>
+                                    </h3>
+                                </li>
+                                <li class="tasklist_li">
+                                    <p>Time: <%= task.totaltime %>
+                                    </p>
+                                </li>
+                                <li class="tasklist_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
+                                <li class="tasklist_li">
+                                    <input type="hidden" value="<%= task._id %>" name="taskId">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button class="btn" type="button" onclick="deleteTask(this)">Delete</button>
+                                </li>
+                                <li class="tasklist_li"><button class="btn" type="button"
+                                        onclick="punchIn(this)">Punch-In</button></li>
+                                <li class="tasklist_li"><button class="btn" type="button"
+                                        onclick="punchOut(this)">Punch-Out</button></li>
+                            </ul>
+                        </div>
                         <% } %>
-                </div>
-                <%- include('../includes/paginationInclude.ejs', {
-                    currentPage: currentPage, 
-                    nextPage: nextPage, 
-                    previousPage: previousPage, 
-                    lastPage: lastPage, 
-                    hasNextPage: hasNextPage, 
-                    hasPreviousPage: hasPreviousPage
-                    })
-                %>
-                <% } else { %>
-                    <h1>No tasks found</h1>
-            <% } %>
-        </main>
-        <%- include('../includes/javascriptInclude.ejs') %>
+                            <% } else { %>
+                                <h1>No tasks found</h1>
+                                <% } %>
+            </main>
+            <%- include('../includes/javascriptInclude.ejs') %>
     </body>
 </html>

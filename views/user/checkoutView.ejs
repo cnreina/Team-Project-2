@@ -6,9 +6,9 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <ul class="timetracker__task-list">
+            <ul class="tasklist__task-list">
                 <% tasks.forEach(task => { %>
-                    <li class="timetracker__task">
+                    <li class="tasklist__task">
                         <h1><%= task.taskId.title %></h1>
                         <h2>Total Time: <%= task.taskId.totaltime %></h2>
                         <h2>Quantity: <%= task.quantity %></h2>

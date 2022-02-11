@@ -8,19 +8,18 @@
         <main>
             <% if (tasks.length > 0) { %>
                 <% for (let task of tasks) { %>
-                    <div class="timetracker_div">
-                        <ul class="timetracker_ul">
-                            
-                            <li class="timetracker_li"><h3><%= task.title %></h3></li>
-                            <li class="timetracker_li"><p>Time: <%= task.totaltime %></p></li>
-                            <li class="timetracker_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
-                            <li class="timetracker_li">
+                    <div class="tasklist_div">
+                        <ul class="tasklist_ul">
+                            <li class="tasklist_li"><h3><%= task.title %></h3></li>
+                            <li class="tasklist_li"><p>Time: <%= task.totaltime %></p></li>
+                            <li class="tasklist_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
+                            <li class="tasklist_li">
                                 <input type="hidden" value="<%= task._id %>" name="taskId">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button class="btn" type="button" onclick="deleteTask(this)">Delete</button>
                             </li>
-                            <li class="timetracker_li"><button class="btn" type="button" onclick="punchIn(this)">Punch-In</button></li>
-                            <li class="timetracker_li"><button class="btn" type="button" onclick="punchOut(this)">Punch-Out</button></li>
+                            <li class="tasklist_li"><button class="btn" type="button" onclick="punchIn(this)">Punch-In</button></li>
+                            <li class="tasklist_li"><button class="btn" type="button" onclick="punchOut(this)">Punch-Out</button></li>
                         </ul>
                     </div>
                 <% } %>
