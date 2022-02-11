@@ -1,12 +1,6 @@
 REFACTOR
 -------------------------------------------
-dev environment and gitignore setup
 
-
-
-
-ADD
--------------------------------------------
 Remove timetracker page
 change delete to archive
 update archive page edit, delete, and make active buttons on each activity.
@@ -21,7 +15,7 @@ active task indicator
 NOTES
 -------------------------------------------
 
-MVP:
+MVP URL:    https://cse341-team-2.herokuapp.com/
+MVP REPO:   https://github.com/cnreina/Team-Project-2
 
 Task Name > Punch-In button, Punch-Out button > Total Time
-

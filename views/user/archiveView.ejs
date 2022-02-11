@@ -9,18 +9,20 @@
             <% if (archive.length <= 0) { %>
                 <h1>No archive available</h1>
             <% } else { %>
-                <ul class="archive">
-                    <% archive.forEach(archive => { %>
-                        <li class="archive__task">
-                            <h1>Archive - # <%= archive._id %> - <a href="/user/archive/<%= archive._id %>">Archived Task</a></h1>
-                            <ul class="archive__tasks">
-                                <% archive.tasks.forEach(task => { %>
-                                    <li class="archive__tasks-task"><%= task.task.title %> (<%= task.quantity %>)</li>
-                                <% }); %>
-                            </ul>
-                        </li>
-                    <% }); %>
-                </ul>
+                <% archive.forEach(task => { %>
+                    <div class="tasklist_div">
+                        <ul class="tasklist_ul">
+                            <li class="tasklist_li"><h3><%= task.title %></h3></li>
+                            <li class="tasklist_li"><p>Time: <%= task.totaltime %></p></li>
+                            <li class="tasklist_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
+                            <li class="tasklist_li">
+                                <input type="hidden" value="<%= task._id %>" name="taskId">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button class="btn" type="button" onclick="deleteTask(this)">Delete</button>
+                            </li>
+                        </ul>
+                    </div>
+                <% }); %>
             <% } %>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>

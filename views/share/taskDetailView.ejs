@@ -15,9 +15,6 @@
                 <div class="card__content">
                     <h2><%= task.totaltime %></h2>
                     <p><%= task.description %></p>
-                    <% if (isAuthenticated) { %>
-                        <%- include('../includes/addToTimeTrackerInclude.ejs', {task: task}) %>
-                    <% } %>
                 </div>
             </article>
         </main>

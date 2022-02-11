@@ -185,49 +185,49 @@ exports.deleteTask = (req, res, next) => {
     });
 };
 
-exports.getTimeTrackerView = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks;
+exports.getTaskListView = (req, res, next) => {
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.tasklist.tasks;
       if (!tasks) {return next();};
-      res.render('user/timetrackerView', {
-        path: '/user/timetracker',
-        pageTitle: 'TimeTracker',
+      res.render('user/tasklistView', {
+        path: '/user/tasklist',
+        pageTitle: 'TaskList',
         tasks: tasks
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getTimeTrackerView ERROR: ', error);
+      console.log('getTaskListView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postTimeTracker = (req, res, next) => {
+exports.postTaskList = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      return req.user.addToTimeTracker(task);
+      return req.user.addToTaskList(task);
     })
     .then(result => {
-      res.redirect('/user/timetracker');
+      res.redirect('/user/tasklist');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postTimeTracker ERROR: ', error);
+      console.log('postTaskList ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postRemoveTimeTrackerTask = (req, res, next) => {
-  const timetrackerTaskId = req.body.taskId;
-  req.user.removeFromTimeTracker(timetrackerTaskId).then(result => {
-      res.redirect('/user/timetracker');
+exports.postRemoveTaskListTask = (req, res, next) => {
+  const tasklistTaskId = req.body.taskId;
+  req.user.removeFromTaskList(tasklistTaskId).then(result => {
+      res.redirect('/user/tasklist');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postRemoveTimeTrackerTask ERROR: ', error);
+      console.log('postRemoveTaskListTask ERROR: ', error);
       return next(error);
     });
 };
@@ -249,8 +249,8 @@ exports.getArchiveView = (req, res, next) => {
 };
 
 exports.postArchive = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks.map(task => {
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.tasklist.tasks.map(task => {
         return {
           quantity: task.quantity,
           task: { ...task.taskId._doc }
@@ -266,7 +266,7 @@ exports.postArchive = (req, res, next) => {
       return archive.save();
     })
     .then(result => {
-      return req.user.clearTimeTracker();
+      return req.user.clearTaskList();
     })
     .then(() => {
       res.redirect('/user/archive');
@@ -282,8 +282,8 @@ exports.postArchive = (req, res, next) => {
 exports.getCheckoutView = (req, res, next) => {
   let tasks;
   let totalTime = 0;
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      tasks       = user.timetracker.tasks;
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      tasks       = user.tasklist.tasks;
       totalTime  = 0.00;
       tasks.forEach(task => {
         totalTime += task.quantity * task.taskId.totaltime;
@@ -321,8 +321,8 @@ exports.getCheckoutView = (req, res, next) => {
 };
 
 exports.getCheckoutSuccess = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks.map(task => {
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.tasklist.tasks.map(task => {
         return {
           quantity:   task.quantity,
           task:       { ...task.taskId._doc }
@@ -338,7 +338,7 @@ exports.getCheckoutSuccess = (req, res, next) => {
       return archive.save();
     })
     .then(result => {
-      return req.user.clearTimeTracker();
+      return req.user.clearTaskList();
     })
     .then(() => {
       res.redirect('/user/archive');

@@ -1,5 +1,5 @@
-<form action="/user/timetracker" method="post">
+<form action="/user/tasklist" method="post">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <button class="btn" type="submit">Add To TimeTracker</button>
+    <button class="btn" type="submit">Add To TaskList</button>
     <input type="hidden" name="taskId" value="<%= task._id %>">
 </form>
