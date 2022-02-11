@@ -42,7 +42,7 @@ const archiveTask = btn => {
     });
 };
 
-const punchIn = btn => {
+const startTask = btn => {
   // const taskId      = btn.parentNode.querySelector('[name=taskId]').value;
   // const csrf        = btn.parentNode.querySelector('[name=_csrf]').value;
   // const taskElement = btn.closest('ul');
@@ -64,7 +64,7 @@ const punchIn = btn => {
   //   });
 };
 
-const punchOut = btn => {
+const stopTask = btn => {
   // const taskId      = btn.parentNode.querySelector('[name=taskId]').value;
   // const csrf        = btn.parentNode.querySelector('[name=_csrf]').value;
   // const taskElement = btn.closest('article');
