@@ -1,18 +1,35 @@
 /* TASK */
 
 .taskTitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: center;
 }
 
 .taskTotalTime {
+    font-size: 1.1rem;
     text-align: center;
-    color: #4d4d4d;
-    margin-bottom: 0.5rem;
 }
 
 .taskDescription {
     text-align: center;
+}
+
+.taskButton {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid #695100;
+  color: #bd9103;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.taskButton:hover,
+.taskButton:active {
+  background-color: #c7a200;
+  color: white;
 }
 
 /* TASK LIST */
