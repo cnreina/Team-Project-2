@@ -185,56 +185,56 @@ exports.deleteTask = (req, res, next) => {
     });
 };
 
-exports.getTimeTrackerView = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks;
+exports.getTaskListView = (req, res, next) => {
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.tasklist.tasks;
       if (!tasks) {return next();};
-      res.render('user/timetrackerView', {
-        path: '/user/timetracker',
-        pageTitle: 'TimeTracker',
+      res.render('user/tasklistView', {
+        path: '/user/tasklist',
+        pageTitle: 'TaskList',
         tasks: tasks
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getTimeTrackerView ERROR: ', error);
+      console.log('getTaskListView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postTimeTracker = (req, res, next) => {
+exports.postTaskList = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      return req.user.addToTimeTracker(task);
+      return req.user.addToTaskList(task);
     })
     .then(result => {
-      res.redirect('/user/timetracker');
+      res.redirect('/user/tasklist');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postTimeTracker ERROR: ', error);
+      console.log('postTaskList ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postRemoveTimeTrackerTask = (req, res, next) => {
-  const timetrackerTaskId = req.body.taskId;
-  req.user.removeFromTimeTracker(timetrackerTaskId).then(result => {
-      res.redirect('/user/timetracker');
+exports.postRemoveTaskListTask = (req, res, next) => {
+  const tasklistTaskId = req.body.taskId;
+  req.user.removeFromTaskList(tasklistTaskId).then(result => {
+      res.redirect('/user/tasklist');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postRemoveTimeTrackerTask ERROR: ', error);
+      console.log('postRemoveTaskListTask ERROR: ', error);
       return next(error);
     });
 };
 
 exports.getArchiveView = (req, res, next) => {
   Archive.find({'user.userId': req.user._id}).then(archive => {
-      res.render('user/archiveView', {
+      res.render('user/archivedTasksView', {
         path: '/user/archive',
         pageTitle: 'Archive',
         archive: archive
@@ -248,9 +248,9 @@ exports.getArchiveView = (req, res, next) => {
     });
 };
 
-exports.postArchive = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks.map(task => {
+exports.postArchiveTask = (req, res, next) => {
+  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.tasklist.tasks.map(task => {
         return {
           quantity: task.quantity,
           task: { ...task.taskId._doc }
@@ -266,7 +266,7 @@ exports.postArchive = (req, res, next) => {
       return archive.save();
     })
     .then(result => {
-      return req.user.clearTimeTracker();
+      return req.user.clearTaskList();
     })
     .then(() => {
       res.redirect('/user/archive');
@@ -274,79 +274,7 @@ exports.postArchive = (req, res, next) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postArchive ERROR: ', error);
-      return next(error);
-    });
-};
-
-exports.getCheckoutView = (req, res, next) => {
-  let tasks;
-  let totalTime = 0;
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      tasks       = user.timetracker.tasks;
-      totalTime  = 0.00;
-      tasks.forEach(task => {
-        totalTime += task.quantity * task.taskId.totaltime;
-      });
-      return stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items:           tasks.map(task => {
-          return {
-            name:         task.taskId.title,
-            description:  task.taskId.description,
-            amount:       Math.round(task.taskId.totaltime.toFixed(2)*100),
-            currency:     'usd',
-            quantity:     task.quantity
-          };
-        }),
-        success_url:        req.protocol + '://' + req.get('host') + '/user/checkout/success',
-        cancel_url:         req.protocol + '://' + req.get('host') + '/user/checkout/cancel'
-      });
-    })
-    .then(session => {
-      res.render('user/checkoutView', {
-        path:       '/user/checkout',
-        pageTitle:  'Checkout',
-        tasks:      tasks,
-        totalSum:   totalTime,
-        sessionId:  session.id
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('getCheckoutView ERROR: ', error);
-      return next(error);
-    });
-};
-
-exports.getCheckoutSuccess = (req, res, next) => {
-  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.timetracker.tasks.map(task => {
-        return {
-          quantity:   task.quantity,
-          task:       { ...task.taskId._doc }
-        };
-      });
-      const archive = new Archive({
-        user: {
-          email:  req.user.email,
-          userId: req.user
-        },
-        tasks:    tasks
-      });
-      return archive.save();
-    })
-    .then(result => {
-      return req.user.clearTimeTracker();
-    })
-    .then(() => {
-      res.redirect('/user/archive');
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('getCheckoutSuccess ERROR: ', error);
+      console.log('postArchiveTask ERROR: ', error);
       return next(error);
     });
 };

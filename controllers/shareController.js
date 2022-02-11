@@ -10,7 +10,7 @@ exports.getTasksView = (req, res, next) => {
       return Task.find().skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
     })
     .then(tasks => {
-      res.render('share/tasksView', {
+      res.render('share/sharedTasksView', {
         tasks: tasks,
         pageTitle: 'Tasks',
         path: '/share/task-list',
