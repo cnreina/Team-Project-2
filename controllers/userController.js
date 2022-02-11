@@ -133,7 +133,7 @@ exports.postEditTask = (req, res, next) => {
 };
 
 exports.getTasksView = (req, res, next) => {
-  Task.find({ userId: req.user._id, archived: false }).then(tasks => {
+  Task.find({ 'userId': req.user._id, archived: false }).then(tasks => {
       res.render('user/tasksView', {
         tasks: tasks,
         pageTitle: 'User Tasks',
@@ -148,44 +148,43 @@ exports.getTasksView = (req, res, next) => {
     });
 };
 
-exports.archiveTask = (req, res, next) => {
+exports.postArchiveTask = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-    if(task.archived) {
+    // Error Handling: Task already Archived.
+    if(task.archived) { 
       const error = new Error('ERROR: Task already archived');
       error.httpStatusCode = 500;
       console.log(error);
       throw error;
     }
+    // Update and save task
     task.archived = true;
     task.save()
     .then(result => {
-      console.log('archiving task');
       Archive.findOne({'user.userId': req.user._id,}).then(archive => {
-        console.log('finding archive');
-        console.log(archive);
+        // Create new archive if none exists under the user.
         if (!archive) {
-          console.log('no archive found, creating new archive.')
           const newArchive = new Archive({
             user: {
               email: req.user.email,
               userId: req.user._id
             },
-            tasks: [task]
+            tasks: [task._id]
           });
           newArchive.save().then(result => {
             console.log(result);
-            console.log('new archive created, task saved to archive!')
             return res.redirect('/user/archive');
           })
           .catch(err => {
             console.log(err);
           })
         }
-        console.log('archive found, saving task.')
-        archive.tasks.push(task);
+        // Push a reference to the task into an existing archive
+        console.log("pushing item to archive array");
+        archive.tasks.push(task._id);
+        console.log(archive.tasks);
         archive.save().then(result => {
-          console.log('task saved to archive!')
           console.log(result);
           return res.redirect('/user/archive');
         })
@@ -206,6 +205,45 @@ exports.archiveTask = (req, res, next) => {
       error.httpStatusCode = 500;
       console.log('Archive Task ERROR: ', error);
       return next(error);
+  })
+};
+
+exports.deleteArchiveTask = (req, res, next) => {
+  console.log("deleting task");
+  const taskId = req.body.taskId;
+  const archiveId = req.body.archiveId;
+  Archive.findOne({_id: archiveId}).then(archive => {
+    // Error handling: Archive not found
+    if (!archive) {
+      const error = new Error('ERROR: No such archive');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    // update task list
+    const taskList = archive.tasks;
+    const newTaskList = taskList.filter((value, index, taskList) => {
+      return value.toString() !== taskId.toString();
+    });
+    archive.tasks = newTaskList;
+    // save new archive task list
+    archive.save()
+    .then(result => {
+      // delete task from database
+      Task.deleteOne({_id: taskId}).then(result => {
+        console.log(result);
+        res.redirect('/user/archive');
+      })
+      .catch(err => {
+
+      })
+    })
+    .catch(err => {
+
+    })
+  })
+  .catch(err => {
+
   })
 };
 
@@ -256,12 +294,21 @@ exports.postRemoveTimeTrackerTask = (req, res, next) => {
     });
 };
 
+
+
 exports.getArchiveView = (req, res, next) => {
-  Archive.find({'user.userId': req.user._id}).then(archive => {
-      res.render('user/archiveView', {
-        path: '/user/archive',
-        pageTitle: 'Archive',
-        archive: archive
+  Archive.findOne({'user.userId': req.user._id,})
+  .then(archive => {
+      archive.populate('tasks').execPopulate().then(archive => {
+        console.log(archive.tasks);
+        res.render('user/archiveView', {
+          path: '/user/archive',
+          pageTitle: 'Archive',
+          archive: archive,
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
     })
     .catch(err => {

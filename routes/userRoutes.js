@@ -31,7 +31,6 @@ router.post ('/user/edit-task',
   userController.postEditTask
 );
 
-router.post ('/user/archive-task', authController.isLogedIn, userController.archiveTask);
 
 // USER TIME TRACKER
 router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);
@@ -45,7 +44,9 @@ router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
 // USER ARCHIVE
+router.post   ('/user/archive-task', authController.isLogedIn, userController.postArchiveTask);
+router.post ('/user/archive/delete-task',     authController.isLogedIn, userController.deleteArchiveTask)
 router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
-router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getArchivedTaskView);
+// router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getArchivedTaskView);
 
 module.exports = router;

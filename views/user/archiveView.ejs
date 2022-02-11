@@ -10,16 +10,26 @@
                 <h1>No archive available</h1>
             <% } else { %>
                 <ul class="archive">
-                    <% archive.forEach(archive => { %>
                         <li class="archive__task">
-                            <h1>Archive - # <%= archive._id %> - <a href="/user/archive/<%= archive._id %>">Archived Task</a></h1>
+                            <h1>Archive - # <%= archive._id %> -
+                                 <!-- <a href="/user/archive/<%= archive._id %>">Archived Task</a> -->
+                                </h1>
                             <ul class="archive__tasks">
-                                <% archive.tasks.forEach(task => { %>
-                                    <li class="archive__tasks-task"><%= task.title %></li>
+                                <% archive.tasks.forEach(task=> { %>
+                                    <li class="archive__tasks-task">
+                                        <%= task.title %>
+                                    </li>
+                                    <li>
+                                        <form action="/user/archive/delete-task" method="POST">
+                                            <button type="submit">Delete</button>
+                                            <input type="hidden" name="taskId" value="<%= task._id %>">
+                                            <input type="hidden" name="archiveId" value="<%= archive._id %>">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        </form>
+                                    </li>
                                 <% }); %>
                             </ul>
                         </li>
-                    <% }); %>
                 </ul>
             <% } %>
         </main>
