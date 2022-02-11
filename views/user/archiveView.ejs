@@ -12,16 +12,27 @@
                 <ul class="archive">
                         <li class="archive__task">
                             <h1>Archive - # <%= archive._id %> -
-                                 <!-- <a href="/user/archive/<%= archive._id %>">Archived Task</a> -->
+                                 <a href="/user/archive/<%= archive._id %>">Archived Task</a>
                                 </h1>
                             <ul class="archive__tasks">
                                 <% archive.tasks.forEach(task=> { %>
                                     <li class="archive__tasks-task">
                                         <%= task.title %>
                                     </li>
-                                    <li>
+                                    <li class="timetracker_li">
                                         <form action="/user/archive/delete-task" method="POST">
-                                            <button type="submit">Delete</button>
+                                            <button type="submit" class="button">Delete</button>
+                                            <input type="hidden" name="taskId" value="<%= task._id %>">
+                                            <input type="hidden" name="archiveId" value="<%= archive._id %>">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <li class="timetracker_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
+                                    </li>
+                                    <li class="timetracker_li">
+                                        <form action="/user/archive/make-active" method="POST">
+                                            <button type="submit" class="button">Make Active</button>
                                             <input type="hidden" name="taskId" value="<%= task._id %>">
                                             <input type="hidden" name="archiveId" value="<%= archive._id %>">
                                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
