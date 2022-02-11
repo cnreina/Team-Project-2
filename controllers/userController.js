@@ -234,7 +234,7 @@ exports.postRemoveTaskListTask = (req, res, next) => {
 
 exports.getArchiveView = (req, res, next) => {
   Archive.find({'user.userId': req.user._id}).then(archive => {
-      res.render('user/archiveView', {
+      res.render('user/archivedTasksView', {
         path: '/user/archive',
         pageTitle: 'Archive',
         archive: archive
