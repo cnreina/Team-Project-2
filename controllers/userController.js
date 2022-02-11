@@ -248,7 +248,7 @@ exports.getArchiveView = (req, res, next) => {
     });
 };
 
-exports.postArchive = (req, res, next) => {
+exports.postArchiveTask = (req, res, next) => {
   req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
       const tasks = user.tasklist.tasks.map(task => {
         return {
@@ -274,7 +274,7 @@ exports.postArchive = (req, res, next) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postArchive ERROR: ', error);
+      console.log('postArchiveTask ERROR: ', error);
       return next(error);
     });
 };
