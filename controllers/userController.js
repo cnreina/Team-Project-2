@@ -1,6 +1,5 @@
 // INCLUDES
 const mongoose              = require('mongoose');
-const { validationResult }  = require('express-validator/check');
 const fileObject            = require('fs');
 const PDFDocument           = require('pdfkit');
 
@@ -19,8 +18,7 @@ exports.getAddTaskView = (req, res, next) => {
     pageTitle: 'Add Task',
     path: '/user/add-task',
     hasError: false,
-    errorMessage: null,
-    validationErrors: []
+    errorMessage: null
   });
 };
 
@@ -29,7 +27,7 @@ exports.postAddTask = (req, res, next) => {
   const timestart   = req.body.timestart;
   const totaltime   = req.body.totaltime;
   const description = req.body.description;
-  if (!timestart) {
+  if (!title) {
     return res.status(422).render('user/addTaskView', {
       pageTitle: 'Add Task',
       path: '/user/add-task',
@@ -39,33 +37,13 @@ exports.postAddTask = (req, res, next) => {
         totaltime: totaltime,
         description: description
       },
-      errorMessage: 'ERROR: Time Start is required',
-      validationErrors: []
-    });
-  }
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors.array());
-    return res.status(422).render('user/addTaskView', {
-      pageTitle: 'Add Task',
-      path: '/user/add-task',
-      hasError: true,
-      Task: {
-        title: title,
-        totaltime: totaltime,
-        description: description
-      },
-      errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
+      errorMessage: 'ERROR: Title is required'
     });
   }
 
   const task = new Task({
     title:        title,
-    totaltime:    totaltime,
     description:  description,
-    timestart:    timestart,
     userId:       req.user
   });
   task.save().then(result => {
@@ -91,8 +69,7 @@ exports.getEditTaskView = (req, res, next) => {
         path:             '/user/edit-task',
         task:             task,
         hasError:         false,
-        errorMessage:     null,
-        validationErrors: []
+        errorMessage:     null
       });
     })
     .catch(err => {
@@ -106,24 +83,19 @@ exports.getEditTaskView = (req, res, next) => {
 exports.postEditTask = (req, res, next) => {
   const taskId            = req.body.taskId;
   const updatedTitle      = req.body.title;
-  const updatedTotalTime  = req.body.totaltime;
-  const updatedTimeStart  = req.body.timestart;
   const updatedDesc       = req.body.description;
 
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
+  if (!updatedTitle) {
     return res.status(422).render('user/editTaskView', {
       pageTitle:  'Edit Task',
       path:       '/user/edit-task',
       hasError:   true,
       task: {
         title:        updatedTitle,
-        totaltime:    updatedTotalTime,
         description:  updatedDesc,
         _id:          taskId
       },
-      errorMessage:     errors.array()[0].msg,
-      validationErrors: errors.array()
+      errorMessage: 'no title'
     });
   }
 
@@ -133,9 +105,7 @@ exports.postEditTask = (req, res, next) => {
       }
 
       task.title        = updatedTitle;
-      task.totaltime    = updatedTotalTime;
       task.description  = updatedDesc;
-      task.timestart    = updatedTimeStart;
       return task.save().then(result => {
         res.redirect('/user/task-list');
       });
@@ -368,8 +338,7 @@ exports.getArchivedTaskView = (req, res, next) => {
       path:             '/user/archive',
       archive:            archive,
       hasError:         false,
-      errorMessage:     null,
-      validationErrors: []
+      errorMessage:     null
     });
   });
 };

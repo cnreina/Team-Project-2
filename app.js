@@ -8,17 +8,17 @@
 // 2016-05-18T16:00:00
 
 require('dotenv').config();
-const express                   = require('express');
-const session                   = require('express-session');
-const SESSION_SECRET            = process.env.SESSION_SECRET;
-const bodyParser                = require('body-parser');
+const express                         = require('express');
+const session                         = require('express-session');
+const SESSION_SECRET                  = process.env.SESSION_SECRET;
+const bodyParser                      = require('body-parser');
 
 // MongoDB
-const mongoose                  = require('mongoose');
-const MongoDBStore              = require('connect-mongodb-session')(session);
-const MONGODB_OPTIONS           = {useUnifiedTopology: true, useNewUrlParser: true, family: 4};
-const MONGODB_TEAM_CONNECTION_STRING = process.env.MONGODB_TEAM_CONNECTION_STRING;
-const sessionStore              = new MongoDBStore({uri: MONGODB_TEAM_CONNECTION_STRING, collection: 'sessions'});
+const mongoose                        = require('mongoose');
+const MongoDBStore                    = require('connect-mongodb-session')(session);
+const MONGODB_OPTIONS                 = {useUnifiedTopology: true, useNewUrlParser: true, family: 4};
+const MONGODB_TEAM_CONNECTION_STRING  = process.env.MONGODB_TEAM_CONNECTION_STRING;
+const sessionStore                    = new MongoDBStore({uri: MONGODB_TEAM_CONNECTION_STRING, collection: 'sessions'});
 
 const APP_CWD                   = process.cwd();
 const PORT                      = process.env.PORT || 3000;

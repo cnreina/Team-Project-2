@@ -13,7 +13,6 @@
                 <div class="form-control">
                     <label for="title">Title</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"
                         type="text" 
                         name="title" 
                         id="title" 
@@ -26,7 +25,6 @@
                 <div class="form-control">
                     <label for="totaltime">Total Time</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'totaltime') ? 'invalid' : '' %>"
                         type="number" 
                         name="totaltime" 
                         id="totaltime" 
@@ -36,7 +34,6 @@
                 <div class="form-control">
                     <label for="description">Description</label>
                     <textarea 
-                        class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
                         name="description" 
                         id="description" 
                         rows="5"></textarea>

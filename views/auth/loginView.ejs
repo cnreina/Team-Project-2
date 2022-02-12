@@ -13,7 +13,6 @@
                 <div class="form-control">
                     <label for="email">E-Mail</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
                         type="email" 
                         name="email" 
                         id="email" 
@@ -22,7 +21,6 @@
                 <div class="form-control">
                     <label for="password">Password</label>
                     <input 
-                        class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
                         type="password" 
                         name="password" 
                         id="password" 

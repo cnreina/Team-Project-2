@@ -3,7 +3,6 @@ const crypto                = require('crypto');
 const bcrypt                = require('bcryptjs');
 const nodemailer            = require('nodemailer');
 const sendgridTransport     = require('nodemailer-sendgrid-transport');
-const { validationResult }  = require('express-validator/check');
 const APP_CWD               = process.cwd();
 const fileSystem            = require('fs');
 
@@ -37,27 +36,24 @@ exports.getSignupView = (req, res, next) => {
       email: '',
       password: '',
       confirmPassword: ''
-    },
-    validationErrors: []
+    }
   });
 };
 
 exports.postSignup = (req, res, next) => {
   const email     = req.body.email;
   const password  = req.body.password;
-  const errors    = validationResult(req);
-  if (!errors.isEmpty()) {
+  if (!email) {
     console.log(errors.array());
     return res.status(422).render('auth/signupView', {
       path:         '/signup',
       pageTitle:    'Signup',
-      errorMessage: errors.array()[0].msg,
+      errorMessage: 'no email',
       oldInput: {
         email:    email,
         password: password,
         confirmPassword: req.body.confirmPassword
-      },
-      validationErrors: errors.array()
+      }
     });
   }
 
@@ -93,25 +89,22 @@ exports.getLoginView = (req, res, next) => {
     oldInput: {
       email: '',
       password: ''
-    },
-    validationErrors: []
+    }
   });
 };
 
 exports.postLogin = (req, res, next) => {
   const email     = req.body.email;
   const password  = req.body.password;
-  const errors    = validationResult(req);
-  if (!errors.isEmpty()) {
+  if (!email) {
     return res.status(422).render('auth/loginView', {
       path: '/login',
       pageTitle: 'Login',
-      errorMessage: errors.array()[0].msg,
+      errorMessage: 'no email',
       oldInput: {
         email: email,
         password: password
-      },
-      validationErrors: errors.array()
+      }
     });
   }
 
@@ -124,8 +117,7 @@ exports.postLogin = (req, res, next) => {
           oldInput: {
             email: email,
             password: password
-          },
-          validationErrors: []
+          }
         });
       }
       bcrypt.compare(password, user.password).then(doMatch => {
@@ -143,8 +135,7 @@ exports.postLogin = (req, res, next) => {
             oldInput: {
               email:    email,
               password: password
-            },
-            validationErrors: []
+            }
           });
         })
         .catch(err => {
