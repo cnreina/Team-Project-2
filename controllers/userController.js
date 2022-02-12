@@ -14,6 +14,56 @@ const systemController      = require(APP_CWD + '/controllers/systemController')
 const Task                  = require(APP_CWD + '/models/taskSchema');
 const Archive                 = require(APP_CWD + '/models/archiveSchema');
 
+exports.postPunchIn = (req, res, next) => {
+  const taskId = req.body.taskId;
+  const inTime = Date.now();
+  Task.findById(taskId)
+  .then(task => {
+    if(!task.timeStart) {
+      task.timeStart = inTime;
+      task.save()
+      .then(result => {
+        console.log(result);
+        return res.redirect('/user/task-list');
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+    res.redirect('/user/task-list');
+  })
+  .catch(err => {
+    onsole.log(err);
+  })
+};
+
+exports.postPunchOut = (req, res, next) => {
+  console.log('punching Out');
+  const taskId = req.body.taskId;
+  const outTime = Date.now();
+  Task.findById(taskId)
+  .then(task => {
+    if (!task.timeStart) {
+      return res.redirect('/user/task-list');
+    }
+    const inTime = task.timeStart;
+    const totalTime = outTime - inTime;
+    task.totaltime = totalTime;
+    task.timeStart = null;
+    task.save()
+    .then(result => {
+      console.log(result);
+      res.redirect('/user/task-list');
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
+
 exports.getAddTaskView = (req, res, next) => {
   res.render('user/add-task', {
     pageTitle: 'Add Task',
