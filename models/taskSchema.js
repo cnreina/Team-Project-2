@@ -16,11 +16,15 @@ const TaskSchema = new Schema({
   },
   timestart: {
     type: Date,
-    required: true
+    required: false
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true
+  },
+  archived: {
+    type: Boolean,
     required: true
   }
 },
