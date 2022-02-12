@@ -2,7 +2,6 @@ REFACTOR
 -------------------------------------------
 
 Remove timetracker page
-update archive page edit, delete, and make active buttons on each activity.
 punch in functionality
 punch out functionality
 refactor shared task page
