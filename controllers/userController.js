@@ -232,9 +232,9 @@ exports.postRemoveTaskListTask = (req, res, next) => {
     });
 };
 
-exports.getArchiveView = (req, res, next) => {
+exports.getarchivedTaskListView = (req, res, next) => {
   Archive.find({'user.userId': req.user._id}).then(archive => {
-      res.render('user/archiveView', {
+      res.render('user/archivedTaskListView', {
         path: '/user/archive',
         pageTitle: 'Archive',
         archive: archive
@@ -243,7 +243,7 @@ exports.getArchiveView = (req, res, next) => {
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getArchiveView ERROR: ', error);
+      console.log('getarchivedTaskListView ERROR: ', error);
       return next(error);
     });
 };

@@ -47,7 +47,7 @@ router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
 // USER ARCHIVE
-router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
+router.get    ('/user/archive',              authController.isLogedIn, userController.getarchivedTaskListView);
 router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getArchivedTaskView);
 
 module.exports = router;
