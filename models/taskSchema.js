@@ -14,8 +14,8 @@ const TaskSchema = new Schema({
     type: String,
     required: true
   },
-  timestart: {
-    type: Date,
+  timeStart: {
+    type: Number,
     required: false
   },
   userId: {
