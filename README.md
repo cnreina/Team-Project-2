@@ -9,6 +9,10 @@
 ### Version History
 * 0.1 - Initial Release  
 
+### Access
+MVP URL:    https://cse341-team-2.herokuapp.com/  
+MVP REPO:   https://github.com/cnreina/Team-Project-2  
+
 ## Description
 ### Time Tracker
 A daily productivity application to help users improve their studies and skills using a time tracker and link organizer.  

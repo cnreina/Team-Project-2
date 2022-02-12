@@ -175,25 +175,7 @@ form {
   align-items: stretch;
 }
 
-/* .archivedTask {
-  margin: 5px;
-  padding-left: 10px;
-  text-align: left;
-}
-
-.archivedTask__content {
-  padding: 15px;
-  margin: 10px;
-  text-align: left;
-}
-
-.archivedTask__task {
-  padding: 0;
-  margin: 0;
-  text-align: left;
-} */
-
-.card {
+/* .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   background: white;
 }
@@ -229,7 +211,7 @@ form {
 .card__actions button,
 .card__actions a {
   margin: 0 0.25rem;
-}
+} */
 
 .btn {
   display: inline-block;
