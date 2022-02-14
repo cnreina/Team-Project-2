@@ -24,7 +24,7 @@ exports.postPunchIn = (req, res, next) => {
         task.save()
           .then(result => {
             console.log(result);
-            return res.redirect('/user/task-list');
+            return res.status(302).redirect('/user/task-list');
           })
           .catch(err => {
             const error = new Error(err);
@@ -32,8 +32,9 @@ exports.postPunchIn = (req, res, next) => {
             console.log('postPunchIn ERROR: ', error);
             return next(error);
           })
+      } else {
+        res.status(302).redirect('/user/task-list');
       }
-      res.redirect('/user/task-list');
     })
     .catch(err => {
       const error = new Error(err);
@@ -50,7 +51,7 @@ exports.postPunchOut = (req, res, next) => {
   Task.findById(taskId)
   .then(task => {
     if (!task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.status(302).redirect('/user/task-list');
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
@@ -65,7 +66,7 @@ exports.postPunchOut = (req, res, next) => {
     task.save()
       .then(result => {
         console.log(result);
-        res.redirect('/user/task-list');
+        res.status(302).redirect('/user/task-list');
       })
       .catch(err => {
         const error = new Error(err);
@@ -158,9 +159,12 @@ exports.getEditTaskView = (req, res, next) => {
 exports.postEditTask = (req, res, next) => {
   const taskId            = req.body.taskId;
   const updatedTitle      = req.body.title;
-  const updatedTotalTime  = req.body.totaltime;
+  const updatedHours      = req.body.hours;
+  const updatedMinutes    = req.body.minutes;
   const updatedTimeStart  = req.body.timestart;
   const updatedDesc       = req.body.description;
+  
+  const updatedTotalTime  = (updatedHours * 60 * 60 * 1000) + (updatedMinutes * 60 * 1000);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -171,6 +175,8 @@ exports.postEditTask = (req, res, next) => {
       task: {
         title:        updatedTitle,
         totaltime:    updatedTotalTime,
+        hours:        updatedHours,
+        minutes:      updatedMinutes,
         description:  updatedDesc,
         _id:          taskId
       },
@@ -186,6 +192,8 @@ exports.postEditTask = (req, res, next) => {
 
       task.title        = updatedTitle;
       task.totaltime    = updatedTotalTime;
+      task.hours        = updatedHours;
+      task.minutes      = updatedMinutes;
       task.description  = updatedDesc;
       task.timestart    = updatedTimeStart;
       return task.save().then(result => {
