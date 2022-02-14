@@ -70,12 +70,12 @@ exports.postPunchOut = (req, res, next) => {
         return next(error);
       })
   })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('postPunchOut ERROR: ', error);
-      return next(error);
-    })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('postPunchOut ERROR: ', error);
+    return next(error);
+  })
 }
 
 exports.getAddTaskView = (req, res, next) => {
