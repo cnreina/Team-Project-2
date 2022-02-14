@@ -2,11 +2,8 @@ REFACTOR
 -------------------------------------------
 
 Remove timetracker page
-punch in functionality
-punch out functionality
 refactor shared task page
 time refresh button
-active task indicator
 
 
 NOTES

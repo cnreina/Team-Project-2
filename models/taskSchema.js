@@ -10,6 +10,14 @@ const TaskSchema = new Schema({
     type: Number,
     required: true
   },
+  hours: {
+    type: Number,
+    required: false
+  },
+  minutes: {
+    type: Number,
+    required: false
+  },
   description: {
     type: String,
     required: true

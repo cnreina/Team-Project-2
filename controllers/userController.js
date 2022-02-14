@@ -11,30 +11,36 @@ const APP_CWD               = process.cwd();
 
 const systemController      = require(APP_CWD + '/controllers/systemController');
 
-const Task                  = require(APP_CWD + '/models/taskSchema');
-const Archive                 = require(APP_CWD + '/models/archiveSchema');
+const Task = require(APP_CWD + '/models/taskSchema');
+const Archive = require(APP_CWD + '/models/archiveSchema');
 
 exports.postPunchIn = (req, res, next) => {
   const taskId = req.body.taskId;
   const inTime = Date.now();
   Task.findById(taskId)
-  .then(task => {
-    if(!task.timeStart) {
-      task.timeStart = inTime;
-      task.save()
-      .then(result => {
-        console.log(result);
-        return res.redirect('/user/task-list');
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    }
-    res.redirect('/user/task-list');
-  })
-  .catch(err => {
-    onsole.log(err);
-  })
+    .then(task => {
+      if (!task.timeStart) {
+        task.timeStart = inTime;
+        task.save()
+          .then(result => {
+            console.log(result);
+            return res.redirect('/user/task-list');
+          })
+          .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            console.log('postPunchIn ERROR: ', error);
+            return next(error);
+          })
+      }
+      res.redirect('/user/task-list');
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('postPunchIn ERROR: ', error);
+      return next(error);
+    })
 };
 
 exports.postPunchOut = (req, res, next) => {
@@ -48,20 +54,32 @@ exports.postPunchOut = (req, res, next) => {
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
-    task.totaltime = totalTime;
+    task.totaltime += totalTime;
     task.timeStart = null;
+    const hours = Math.floor(task.totaltime / 1000 / 60 / 60);
+    const remH = task.totaltime - (60 * 60 * 1000 * hours)
+    const minutes = Math.floor(remH / 1000 / 60);
+    console.log("h: " + hours + " m: " + minutes);
+    task.hours = hours;
+    task.minutes = minutes;
     task.save()
-    .then(result => {
-      console.log(result);
-      res.redirect('/user/task-list');
-    })
+      .then(result => {
+        console.log(result);
+        res.redirect('/user/task-list');
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postPunchOut ERROR: ', error);
+        return next(error);
+      })
+  })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('postPunchOut ERROR: ', error);
+      return next(error);
     })
-  })
-  .catch(err => {
-    console.log(err);
-  })
 }
 
 exports.getAddTaskView = (req, res, next) => {
@@ -239,15 +257,24 @@ exports.postArchiveTask = (req, res, next) => {
           return res.redirect('/user/archive');
         })
         .catch(err => {
-          console.log(err);
+          const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('Archive Task ERROR: ', error);
+      return next(error);
         })
       })
       .catch(err => {
-
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('Archive Task ERROR: ', error);
+        return next(error);
       })
     })
     .catch(err => {
-      console.log(err)
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('Archive Task ERROR: ', error);
+      return next(error);
     })
   })
   .catch(err => {
@@ -285,15 +312,24 @@ exports.deleteArchiveTask = (req, res, next) => {
         res.redirect('/user/archive');
       })
       .catch(err => {
-
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('Delete archive Task ERROR: ', error);
+        return next(error);
       })
     })
     .catch(err => {
-
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('Delete archive Task ERROR: ', error);
+      return next(error);
     })
   })
   .catch(err => {
-
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('Delete archive Task ERROR: ', error);
+    return next(error);
   })
 };
 
@@ -327,19 +363,31 @@ exports.postMakeActive = (req, res, next) => {
           res.redirect('/user/tasks');
         })
         .catch(err => {
-          console.log(err);
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          console.log('Make task active ERROR: ', error);
+          return next(error);
         })
       })
       .catch(err => {
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('Make task active ERROR: ', error);
+        return next(error);
       })
     })
-    .catch(err => {
-      console.log(err);
-    })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('Make task active ERROR: ', error);
+        return next(error);
+      })
   })
-  .catch(err => {
-    console.log(err);
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('Make task active ERROR: ', error);
+      return next(error);
   })
 }
 
@@ -395,7 +443,9 @@ exports.postRemoveTimeTrackerTask = (req, res, next) => {
 exports.getArchiveView = (req, res, next) => {
   Archive.findOne({'user.userId': req.user._id,})
   .then(archive => {
-      archive.populate('tasks').execPopulate().then(archive => {
+      archive.populate('tasks')
+      .execPopulate()
+      .then(archive => {
         console.log(archive.tasks);
         res.render('user/archiveView', {
           path: '/user/archive',
@@ -404,9 +454,12 @@ exports.getArchiveView = (req, res, next) => {
         });
       })
       .catch(err => {
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('getArchiveView ERROR: ', error);
+        return next(error);
       });
-    })
+  })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
