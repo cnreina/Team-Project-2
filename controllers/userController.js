@@ -24,7 +24,7 @@ exports.postPunchIn = (req, res, next) => {
         task.save()
           .then(result => {
             console.log(result);
-            return res.redirect('/user/task-list');
+            return res.status(302).redirect('/user/task-list');
           })
           .catch(err => {
             const error = new Error(err);
@@ -32,8 +32,9 @@ exports.postPunchIn = (req, res, next) => {
             console.log('postPunchIn ERROR: ', error);
             return next(error);
           })
+      } else {
+        res.status(302).redirect('/user/task-list');
       }
-      res.redirect('/user/task-list');
     })
     .catch(err => {
       const error = new Error(err);
@@ -50,7 +51,7 @@ exports.postPunchOut = (req, res, next) => {
   Task.findById(taskId)
   .then(task => {
     if (!task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.status(302).redirect('/user/task-list');
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
@@ -65,7 +66,7 @@ exports.postPunchOut = (req, res, next) => {
     task.save()
       .then(result => {
         console.log(result);
-        res.redirect('/user/task-list');
+        res.status(302).redirect('/user/task-list');
       })
       .catch(err => {
         const error = new Error(err);

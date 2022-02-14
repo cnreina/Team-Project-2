@@ -22,6 +22,7 @@
                                     <button class="btn" type="submit">Archive</button>
                                 </form>
                             </li>
+                            <% if (!task.timeStart) { %>
                             <li class="timetracker_li">
                                 <form action="/user/punchIn" method="POST">
                                     <button type="submit">Punch In</button>
@@ -29,6 +30,7 @@
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 </form>
                             </li>
+                            <% } else {%>
                             <li class="timetracker_li">
                                 <form action="/user/punchOut" method="POST">
                                     <button type="submit">Punch Out</button>
@@ -36,6 +38,7 @@
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 </form>
                             </li>
+                            <% } %>
                         </ul>
                     </div>
                 <% } %>
