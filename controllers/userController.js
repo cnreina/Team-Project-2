@@ -9,8 +9,6 @@ const stripe                = require('stripe')(STRYPE_API_KEY);
 
 const APP_CWD               = process.cwd();
 
-const systemController      = require(APP_CWD + '/controllers/systemController');
-
 const Task = require(APP_CWD + '/models/taskSchema');
 const Archive = require(APP_CWD + '/models/archiveSchema');
 
@@ -217,35 +215,37 @@ exports.postArchiveTask = (req, res, next) => {
   Task.findById(taskId).then(task => {
     // Error Handling: Task already Archived.
     if(task.archived) { 
-      const error = new Error('ERROR: Task already archived');
+      const error = new Error('postArchiveTask-findById ERROR: Task already archived');
       error.httpStatusCode = 500;
       console.log(error);
       throw error;
     }
     // Update and save task
     task.archived = true;
-    task.save()
-    .then(result => {
+    task.save().then(result => {
       Archive.findOne({'user.userId': req.user._id,}).then(archive => {
         // Create new archive if none exists under the user.
         if (!archive) {
           const newArchive = new Archive({
             user: {
-              email: req.user.email,
+              email:  req.user.email,
               userId: req.user._id
             },
             tasks: [task._id]
           });
           newArchive.save().then(result => {
-            console.log(result);
-            return res.redirect('/user/archive');
+            // console.log(result);
+            res.redirect('/user/archive');
           })
           .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            console.log('postArchiveTask-newArchive ERROR: ', error);
+            return next(error);
           })
         }
         // Push a reference to the task into an existing archive
-        console.log("pushing item to archive array");
+        // console.log("pushing item to archive array");
         archive.tasks.push(task._id);
         console.log(archive.tasks);
         archive.save().then(result => {
@@ -254,29 +254,29 @@ exports.postArchiveTask = (req, res, next) => {
         })
         .catch(err => {
           const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('Archive Task ERROR: ', error);
-      return next(error);
+          error.httpStatusCode = 500;
+          console.log('postArchiveTask-push ERROR: ', error);
+          return next(error);
         })
       })
       .catch(err => {
         const error = new Error(err);
         error.httpStatusCode = 500;
-        console.log('Archive Task ERROR: ', error);
+        console.log('postArchiveTask-findOne ERROR: ', error);
         return next(error);
       })
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('Archive Task ERROR: ', error);
+      console.log('postArchiveTask-save ERROR: ', error);
       return next(error);
     })
   })
   .catch(err => {
     const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('Archive Task ERROR: ', error);
+    console.log('postArchiveTask ERROR: ', error);
       return next(error);
   })
 };
@@ -434,34 +434,28 @@ exports.postRemoveTimeTrackerTask = (req, res, next) => {
     });
 };
 
-
-
 exports.getArchiveView = (req, res, next) => {
-  Archive.findOne({'user.userId': req.user._id,})
-  .then(archive => {
-      archive.populate('tasks')
-      .execPopulate()
-      .then(archive => {
-        console.log(archive.tasks);
+  Archive.findOne({'user.userId': req.user._id,}).then(archive => {
+      archive.populate('tasks').execPopulate().then(archive => {
         res.render('user/archiveView', {
-          path: '/user/archive',
-          pageTitle: 'Archive',
-          archive: archive,
+          path:       '/user/archive',
+          pageTitle:  'Archive',
+          archive:    archive,
         });
       })
       .catch(err => {
         const error = new Error(err);
         error.httpStatusCode = 500;
-        console.log('getArchiveView ERROR: ', error);
+        console.log('getArchiveView-archive ERROR: ', error);
         return next(error);
       });
   })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('getArchiveView ERROR: ', error);
-      return next(error);
-    });
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('getArchiveView ERROR: ', error);
+    return next(error);
+  });
 };
 
 exports.postArchive = (req, res, next) => {

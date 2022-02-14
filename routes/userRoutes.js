@@ -46,10 +46,10 @@ router.get    ('/user/checkout/success',   userController.getCheckoutSuccess);
 router.get    ('/user/checkout/cancel',    userController.getCheckoutView);
 
 // USER ARCHIVE
-router.post   ('/user/archive-task', authController.isLogedIn, userController.postArchiveTask);
-router.post ('/user/archive/delete-task',     authController.isLogedIn, userController.deleteArchiveTask)
-router.post ('/user/archive/make-active',     authController.isLogedIn, userController.postMakeActive)
-router.get    ('/user/archive',              authController.isLogedIn, userController.getArchiveView);
-router.get    ('/user/archive/:archiveId',     authController.isLogedIn, userController.getArchivedTaskView);
+router.post   ('/user/archive-task',            authController.isLogedIn, userController.postArchiveTask);
+router.post   ('/user/archive/delete-task',     authController.isLogedIn, userController.deleteArchiveTask)
+router.post   ('/user/archive/make-active',     authController.isLogedIn, userController.postMakeActive)
+router.get    ('/user/archive',                 authController.isLogedIn, userController.getArchiveView);
+router.get    ('/user/archive/:archiveId',      authController.isLogedIn, userController.getArchivedTaskView);
 
 module.exports = router;
