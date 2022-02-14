@@ -17,23 +17,21 @@ const Archive = require(APP_CWD + '/models/archiveSchema');
 exports.postPunchIn = (req, res, next) => {
   const taskId = req.body.taskId;
   const inTime = Date.now();
-  Task.findById(taskId)
-    .then(task => {
-      if (!task.timeStart) {
-        task.timeStart = inTime;
-        task.save()
-          .then(result => {
-            console.log(result);
-            return res.redirect('/user/task-list');
-          })
-          .catch(err => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            console.log('postPunchIn ERROR: ', error);
-            return next(error);
-          })
-      }
-      res.redirect('/user/task-list');
+  Task.findById(taskId).then(task => {
+    if (task.timeStart) {
+      return res.redirect('/user/task-list');
+    }
+    task.timeStart = inTime;
+    task.save().then(result => {
+        // console.log('postPunchIn: ',result);
+        res.redirect('/user/task-list');
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postPunchIn-timeStart ERROR: ', error);
+        return next(error);
+      })
     })
     .catch(err => {
       const error = new Error(err);
@@ -44,11 +42,10 @@ exports.postPunchIn = (req, res, next) => {
 };
 
 exports.postPunchOut = (req, res, next) => {
-  console.log('punching Out');
+  // console.log('punching Out');
   const taskId = req.body.taskId;
   const outTime = Date.now();
-  Task.findById(taskId)
-  .then(task => {
+  Task.findById(taskId).then(task => {
     if (!task.timeStart) {
       return res.redirect('/user/task-list');
     }
@@ -59,12 +56,11 @@ exports.postPunchOut = (req, res, next) => {
     const hours = Math.floor(task.totaltime / 1000 / 60 / 60);
     const remH = task.totaltime - (60 * 60 * 1000 * hours)
     const minutes = Math.floor(remH / 1000 / 60);
-    console.log("h: " + hours + " m: " + minutes);
+    // console.log("h: " + hours + " m: " + minutes);
     task.hours = hours;
     task.minutes = minutes;
-    task.save()
-      .then(result => {
-        console.log(result);
+    task.save().then(result => {
+        // console.log('postPunchOut: ', result);
         res.redirect('/user/task-list');
       })
       .catch(err => {

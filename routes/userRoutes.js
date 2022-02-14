@@ -31,10 +31,8 @@ router.post ('/user/edit-task',
   userController.postEditTask
 );
 
-router.post   ('/user/punchIn',           authController.isLogedIn, userController.postPunchIn);
-
-router.post   ('/user/punchOut',           authController.isLogedIn, userController.postPunchOut);
-
+router.post   ('/user/punchIn',                   authController.isLogedIn, userController.postPunchIn);
+router.post   ('/user/punchOut',                  authController.isLogedIn, userController.postPunchOut);
 
 // USER TIME TRACKER
 router.get    ('/user/timetracker',               authController.isLogedIn, userController.getTimeTrackerView);
