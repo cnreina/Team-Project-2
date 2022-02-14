@@ -4,7 +4,6 @@ REFACTOR
 Remove timetracker page
 refactor shared task page
 time refresh button
-active task indicator
 
 
 NOTES
