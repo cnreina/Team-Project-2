@@ -48,8 +48,14 @@ exports.postPunchOut = (req, res, next) => {
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
-    task.totaltime = totalTime;
+    task.totaltime += totalTime;
     task.timeStart = null;
+    const hours = Math.floor(task.totaltime / 1000 / 60 / 60);
+    const remH = task.totaltime - (60 * 60 * 1000 * hours)
+    const minutes = Math.floor(remH / 1000 / 60);
+    console.log("h: " + hours + " m: " + minutes);
+    task.hours = hours;
+    task.minutes = minutes;
     task.save()
     .then(result => {
       console.log(result);

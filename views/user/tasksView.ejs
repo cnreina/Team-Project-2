@@ -12,7 +12,8 @@
                         <ul class="timetracker_ul">
                             
                             <li class="timetracker_li"><h3><%= task.title %></h3></li>
-                            <li class="timetracker_li"><p>Time: <%= task.totaltime %></p></li>
+                            <% if (task.timeStart) { %><li class="timetracker_li"> <h3>Active</h3></li><% } %>
+                            <li class="timetracker_li"><p>Time: H: <%= task.hours %> M: <%= task.minutes %></p></li>
                             <li class="timetracker_li"><a href="/user/edit-task/<%= task._id %>" class="btn">Edit</a></li>
                             <li class="timetracker_li">
                                 <form action="/user/archive-task" method="POST">
