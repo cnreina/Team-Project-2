@@ -247,9 +247,7 @@ exports.postArchiveTask = (req, res, next) => {
         // Push a reference to the task into an existing archive
         // console.log("pushing item to archive array");
         archive.tasks.push(task._id);
-        console.log(archive.tasks);
         archive.save().then(result => {
-          console.log(result);
           return res.redirect('/user/archive');
         })
         .catch(err => {
@@ -330,60 +328,56 @@ exports.deleteArchiveTask = (req, res, next) => {
 };
 
 exports.postMakeActive = (req, res, next) => {
-  const taskId = req.body.taskId;
+  const taskId    = req.body.taskId;
   const archiveId = req.body.archiveId;
-  Archive.findOne({_id: archiveId})
-  .then(archive => {
+  Archive.findOne({_id: archiveId}).then(archive => {
     // Error handling: Archive not found
     if (!archive) {
-      const error = new Error('ERROR: No such archive');
+      const error = new Error('postMakeActive-archive ERROR: No archive');
       error.httpStatusCode = 500;
       console.log(error);
       throw error;
     }
     // update task list
-    const taskList = archive.tasks;
+    const taskList    = archive.tasks;
     const newTaskList = taskList.filter((value, index, taskList) => {
       return value.toString() !== taskId.toString();
     });
     archive.tasks = newTaskList;
     // save new archive task list
-    archive.save()
-    .then(result => {
-      // make task not archived
-      Task.findOne({_id: taskId})
-      .then(task => {
+    archive.save().then(result => {
+      // unarchive task
+      Task.findOne({_id: taskId}).then(task => {
         task.archived = false;
-        task.save()
-        .then(result => {
-          res.redirect('/user/tasks');
+        task.save().then(result => {
+          res.redirect('/user/task-list');
         })
         .catch(err => {
           const error = new Error(err);
           error.httpStatusCode = 500;
-          console.log('Make task active ERROR: ', error);
+          console.log('postMakeActive-save ERROR: ', error);
           return next(error);
         })
       })
       .catch(err => {
         const error = new Error(err);
         error.httpStatusCode = 500;
-        console.log('Make task active ERROR: ', error);
+        console.log('postMakeActive-findOne ERROR: ', error);
         return next(error);
       })
     })
-      .catch(err => {
-        const error = new Error(err);
-        error.httpStatusCode = 500;
-        console.log('Make task active ERROR: ', error);
-        return next(error);
-      })
-  })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('Make task active ERROR: ', error);
+      console.log('postMakeActive ERROR: ', error);
       return next(error);
+    })
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('postMakeActive ERROR: ', error);
+    return next(error);
   })
 }
 
