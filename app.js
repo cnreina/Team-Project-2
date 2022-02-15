@@ -1,11 +1,10 @@
 /* CSE 341 - Team 2
-  Carlos N Reina
-  Michael Norton
-  Aaron Rooks
-  Leonardo Souza
+    Carlos N Reina
+    Michael Norton
+    Aaron Rooks
+    Leonardo Souza
 */
 
-// 2016-05-18T16:00:00
 
 require('dotenv').config();
 const express                         = require('express');
@@ -20,9 +19,9 @@ const MONGODB_OPTIONS                 = {useUnifiedTopology: true, useNewUrlPars
 const MONGODB_TEAM_CONNECTION_STRING  = process.env.MONGODB_TEAM_CONNECTION_STRING;
 const sessionStore                    = new MongoDBStore({uri: MONGODB_TEAM_CONNECTION_STRING, collection: 'sessions'});
 
-const APP_CWD                   = process.cwd();
-const PORT                      = process.env.PORT || 3000;
-const HEROKU_TEAM_APP_URL       = process.env.HEROKU_TEAM_APP_URL;
+const APP_CWD                         = process.cwd();
+const PORT                            = process.env.PORT || 3000;
+const HEROKU_TEAM_APP_URL             = process.env.HEROKU_TEAM_APP_URL;
 
 const CORS_OPTIONS              = { origin: HEROKU_TEAM_APP_URL, optionsSuccessStatus: 200 };
 const cors                      = require('cors');

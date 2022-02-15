@@ -8,13 +8,75 @@ const stripe                = require('stripe')(STRYPE_API_KEY);
 
 const APP_CWD               = process.cwd();
 
-const systemController      = require(APP_CWD + '/controllers/systemController');
+const Task = require(APP_CWD + '/models/taskSchema');
+const Archive = require(APP_CWD + '/models/archiveSchema');
 
-const Task                  = require(APP_CWD + '/models/taskSchema');
-const Archive                 = require(APP_CWD + '/models/archiveSchema');
+exports.postPunchIn = (req, res, next) => {
+  const taskId = req.body.taskId;
+  const inTime = Date.now();
+  Task.findById(taskId).then(task => {
+    if (task.timeStart) {
+      return res.redirect('/user/task-list');
+    }
+    task.timeStart = inTime;
+    task.save().then(result => {
+        // console.log('postPunchIn: ',result);
+        res.redirect('/user/task-list');
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postPunchIn-timeStart ERROR: ', error);
+        return next(error);
+      })
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('postPunchIn ERROR: ', error);
+      return next(error);
+    })
+};
+
+exports.postPunchOut = (req, res, next) => {
+  // console.log('punching Out');
+  const taskId = req.body.taskId;
+  const outTime = Date.now();
+  Task.findById(taskId).then(task => {
+    if (!task.timeStart) {
+      return res.redirect('/user/task-list');
+    }
+    const inTime = task.timeStart;
+    const totalTime = outTime - inTime;
+    task.totaltime += totalTime;
+    task.timeStart = null;
+    const hours = Math.floor(task.totaltime / 1000 / 60 / 60);
+    const remH = task.totaltime - (60 * 60 * 1000 * hours)
+    const minutes = Math.floor(remH / 1000 / 60);
+    // console.log("h: " + hours + " m: " + minutes);
+    task.hours = hours;
+    task.minutes = minutes;
+    task.save().then(result => {
+        // console.log('postPunchOut: ', result);
+        res.redirect('/user/task-list');
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postPunchOut ERROR: ', error);
+        return next(error);
+      })
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('postPunchOut ERROR: ', error);
+    return next(error);
+  })
+}
 
 exports.getAddTaskView = (req, res, next) => {
-  res.render('user/addTaskView', {
+  res.render('user/add-task', {
     pageTitle: 'Add Task',
     path: '/user/add-task',
     hasError: false,
@@ -24,27 +86,31 @@ exports.getAddTaskView = (req, res, next) => {
 
 exports.postAddTask = (req, res, next) => {
   const title       = req.body.title;
-  const timestart   = req.body.timestart;
-  const totaltime   = req.body.totaltime;
   const description = req.body.description;
-  if (!title) {
-    return res.status(422).render('user/addTaskView', {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('user/add-task', {
       pageTitle: 'Add Task',
       path: '/user/add-task',
       hasError: true,
       Task: {
         title: title,
-        totaltime: totaltime,
-        description: description
+        description: description,
+
       },
-      errorMessage: 'ERROR: Title is required'
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array()
     });
   }
 
   const task = new Task({
     title:        title,
+    totaltime:    0,
     description:  description,
-    userId:       req.user
+    userId:       req.user,
+    archived: false,
   });
   task.save().then(result => {
       res.redirect('/user/task-list');
@@ -119,7 +185,7 @@ exports.postEditTask = (req, res, next) => {
 };
 
 exports.getTasksView = (req, res, next) => {
-  Task.find({ userId: req.user._id }).then(tasks => {
+  Task.find({ 'userId': req.user._id, archived: false }).then(tasks => {
       res.render('user/tasksView', {
         tasks: tasks,
         pageTitle: 'User Tasks',
@@ -134,93 +200,251 @@ exports.getTasksView = (req, res, next) => {
     });
 };
 
-exports.deleteTask = (req, res, next) => {
-  const taskId = req.params.taskId;
+exports.postArchiveTask = (req, res, next) => {
+  const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      if (!task) {
-        console.log('deleteTask ERROR: ', task);
-        return next(new Error('Task not found.'));
-      }
-      return Task.deleteOne({ _id: taskId, userId: req.user._id });
-    })
-    .then(() => {
-      res.status(200).json({ message: 'Success' });
+    // Error Handling: Task already Archived.
+    if(task.archived) { 
+      const error = new Error('postArchiveTask-findById ERROR: Task already archived');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    // Update and save task
+    task.archived = true;
+    task.save().then(result => {
+      Archive.findOne({'user.userId': req.user._id,}).then(archive => {
+        // Create new archive if none exists under the user.
+        if (!archive) {
+          const newArchive = new Archive({
+            user: {
+              email:  req.user.email,
+              userId: req.user._id
+            },
+            tasks: [task._id]
+          });
+          newArchive.save().then(result => {
+            // console.log(result);
+            res.redirect('/user/archive');
+          })
+          .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            console.log('postArchiveTask-newArchive ERROR: ', error);
+            return next(error);
+          })
+        }
+        // Push a reference to the task into an existing archive
+        // console.log("pushing item to archive array");
+        archive.tasks.push(task._id);
+        archive.save().then(result => {
+          return res.redirect('/user/archive');
+        })
+        .catch(err => {
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          console.log('postArchiveTask-push ERROR: ', error);
+          return next(error);
+        })
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postArchiveTask-findOne ERROR: ', error);
+        return next(error);
+      })
     })
     .catch(err => {
-      res.status(500).json({ message: 'Task delete failed' });
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('deleteTask ERROR: ', error);
+      console.log('postArchiveTask-save ERROR: ', error);
       return next(error);
-    });
+    })
+  })
+  .catch(err => {
+    const error = new Error(err);
+      error.httpStatusCode = 500;
+    console.log('postArchiveTask ERROR: ', error);
+      return next(error);
+  })
 };
 
-exports.getTaskListView = (req, res, next) => {
-  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.tasklist.tasks;
+exports.deleteArchiveTask = (req, res, next) => {
+  console.log("deleting task");
+  const taskId = req.body.taskId;
+  const archiveId = req.body.archiveId;
+  Archive.findOne({_id: archiveId}).then(archive => {
+    // Error handling: Archive not found
+    if (!archive) {
+      const error = new Error('ERROR: No such archive');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    // update task list
+    const taskList = archive.tasks;
+    const newTaskList = taskList.filter((value, index, taskList) => {
+      return value.toString() !== taskId.toString();
+    });
+    archive.tasks = newTaskList;
+    // save new archive task list
+    archive.save()
+    .then(result => {
+      // delete task from database
+      Task.deleteOne({_id: taskId}).then(result => {
+        console.log(result);
+        res.redirect('/user/archive');
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('Delete archive Task ERROR: ', error);
+        return next(error);
+      })
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('Delete archive Task ERROR: ', error);
+      return next(error);
+    })
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('Delete archive Task ERROR: ', error);
+    return next(error);
+  })
+};
+
+exports.postMakeActive = (req, res, next) => {
+  const taskId    = req.body.taskId;
+  const archiveId = req.body.archiveId;
+  Archive.findOne({_id: archiveId}).then(archive => {
+    // Error handling: Archive not found
+    if (!archive) {
+      const error = new Error('postMakeActive-archive ERROR: No archive');
+      error.httpStatusCode = 500;
+      console.log(error);
+      throw error;
+    }
+    // update task list
+    const taskList    = archive.tasks;
+    const newTaskList = taskList.filter((value, index, taskList) => {
+      return value.toString() !== taskId.toString();
+    });
+    archive.tasks = newTaskList;
+    // save new archive task list
+    archive.save().then(result => {
+      // unarchive task
+      Task.findOne({_id: taskId}).then(task => {
+        task.archived = false;
+        task.save().then(result => {
+          res.redirect('/user/task-list');
+        })
+        .catch(err => {
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          console.log('postMakeActive-save ERROR: ', error);
+          return next(error);
+        })
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('postMakeActive-findOne ERROR: ', error);
+        return next(error);
+      })
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('postMakeActive ERROR: ', error);
+      return next(error);
+    })
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('postMakeActive ERROR: ', error);
+    return next(error);
+  })
+}
+
+exports.getTimeTrackerView = (req, res, next) => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks;
       if (!tasks) {return next();};
-      res.render('user/tasklistView', {
-        path: '/user/tasklist',
-        pageTitle: 'TaskList',
+      res.render('user/timetrackerView', {
+        path: '/user/timetracker',
+        pageTitle: 'TimeTracker',
         tasks: tasks
       });
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('getTaskListView ERROR: ', error);
+      console.log('getTimeTrackerView ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postTaskList = (req, res, next) => {
+exports.postTimeTracker = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-      return req.user.addToTaskList(task);
+      return req.user.addToTimeTracker(task);
     })
     .then(result => {
-      res.redirect('/user/tasklist');
+      res.redirect('/user/timetracker');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postTaskList ERROR: ', error);
+      console.log('postTimeTracker ERROR: ', error);
       return next(error);
     });
 };
 
-exports.postRemoveTaskListTask = (req, res, next) => {
-  const tasklistTaskId = req.body.taskId;
-  req.user.removeFromTaskList(tasklistTaskId).then(result => {
-      res.redirect('/user/tasklist');
+exports.postRemoveTimeTrackerTask = (req, res, next) => {
+  const timetrackerTaskId = req.body.taskId;
+  req.user.removeFromTimeTracker(timetrackerTaskId).then(result => {
+      res.redirect('/user/timetracker');
     })
     .catch(err => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      console.log('postRemoveTaskListTask ERROR: ', error);
+      console.log('postRemoveTimeTrackerTask ERROR: ', error);
       return next(error);
     });
 };
 
-exports.getarchivedTaskListView = (req, res, next) => {
-  Archive.find({'user.userId': req.user._id}).then(archive => {
-      res.render('user/archivedTaskListView', {
-        path: '/user/archive',
-        pageTitle: 'Archive',
-        archive: archive
+exports.getArchiveView = (req, res, next) => {
+  Archive.findOne({'user.userId': req.user._id,}).then(archive => {
+      archive.populate('tasks').execPopulate().then(archive => {
+        res.render('user/archivedTasksView', {
+          path:       '/user/archive',
+          pageTitle:  'Archive',
+          archive:    archive,
+        });
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('getArchiveView-archive ERROR: ', error);
+        return next(error);
       });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('getarchivedTaskListView ERROR: ', error);
-      return next(error);
-    });
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('getArchiveView ERROR: ', error);
+    return next(error);
+  });
 };
 
 exports.postArchive = (req, res, next) => {
-  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.tasklist.tasks.map(task => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks.map(task => {
         return {
           quantity: task.quantity,
           task: { ...task.taskId._doc }
@@ -236,7 +460,7 @@ exports.postArchive = (req, res, next) => {
       return archive.save();
     })
     .then(result => {
-      return req.user.clearTaskList();
+      return req.user.clearTimeTracker();
     })
     .then(() => {
       res.redirect('/user/archive');
@@ -252,8 +476,8 @@ exports.postArchive = (req, res, next) => {
 exports.getCheckoutView = (req, res, next) => {
   let tasks;
   let totalTime = 0;
-  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
-      tasks       = user.tasklist.tasks;
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      tasks       = user.timetracker.tasks;
       totalTime  = 0.00;
       tasks.forEach(task => {
         totalTime += task.quantity * task.taskId.totaltime;
@@ -291,8 +515,8 @@ exports.getCheckoutView = (req, res, next) => {
 };
 
 exports.getCheckoutSuccess = (req, res, next) => {
-  req.user.populate('tasklist.tasks.taskId').execPopulate().then(user => {
-      const tasks = user.tasklist.tasks.map(task => {
+  req.user.populate('timetracker.tasks.taskId').execPopulate().then(user => {
+      const tasks = user.timetracker.tasks.map(task => {
         return {
           quantity:   task.quantity,
           task:       { ...task.taskId._doc }
@@ -308,7 +532,7 @@ exports.getCheckoutSuccess = (req, res, next) => {
       return archive.save();
     })
     .then(result => {
-      return req.user.clearTaskList();
+      return req.user.clearTimeTracker();
     })
     .then(() => {
       res.redirect('/user/archive');
