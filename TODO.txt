@@ -1,9 +1,9 @@
 REFACTOR
 -------------------------------------------
 
-Remove timetracker page
-refactor shared task page
-time refresh button
+reset when archiving task
+css
+filter shared tasks
 
 
 NOTES
