@@ -431,7 +431,7 @@ exports.postRemoveTimeTrackerTask = (req, res, next) => {
 exports.getArchiveView = (req, res, next) => {
   Archive.findOne({'user.userId': req.user._id,}).then(archive => {
       archive.populate('tasks').execPopulate().then(archive => {
-        res.render('user/archiveView', {
+        res.render('user/archivedTasksView', {
           path:       '/user/archive',
           pageTitle:  'Archive',
           archive:    archive,
