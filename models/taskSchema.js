@@ -8,7 +8,7 @@ const TaskSchema = new Schema({
   },
   totaltime: {
     type: Number,
-    required: true
+    required: false
   },
   hours: {
     type: Number,
@@ -20,7 +20,7 @@ const TaskSchema = new Schema({
   },
   description: {
     type: String,
-    required: true
+    required: false
   },
   timeStart: {
     type: Number,

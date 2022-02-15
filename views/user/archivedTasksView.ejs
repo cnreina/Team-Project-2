@@ -21,7 +21,6 @@
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 </form>
                             </li>
-                            <li><a class="tasklist_li"><a class="btn" href="/user/edit-task/<%= task._id %>">Edit</a></li>
                             <li class="tasklist_li">
                                 <form action="/user/archive/make-active" method="POST">
                                     <button class="btn" type="submit" >Make Active</button>
