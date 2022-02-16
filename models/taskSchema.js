@@ -8,19 +8,31 @@ const TaskSchema = new Schema({
   },
   totaltime: {
     type: Number,
-    required: true
+    required: false
+  },
+  hours: {
+    type: Number,
+    required: false
+  },
+  minutes: {
+    type: Number,
+    required: false
   },
   description: {
     type: String,
-    required: true
+    required: false
   },
-  timestart: {
-    type: Date,
-    required: true
+  timeStart: {
+    type: Number,
+    required: false
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true
+  },
+  archived: {
+    type: Boolean,
     required: true
   }
 },
