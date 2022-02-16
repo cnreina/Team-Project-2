@@ -63,6 +63,12 @@ form {
   padding: 0;
 }
 
+#timedisplay {
+  margin: 0 1rem;
+  padding: 0;
+  color: #cbcfe991;
+}
+
 .main-header__task a,
 .main-header__task button {
   font: inherit;
