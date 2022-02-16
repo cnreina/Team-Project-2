@@ -2,8 +2,8 @@ REFACTOR
 -------------------------------------------
 
 reset when archiving task
-css
 filter shared tasks
+timer to retrieve total count
 
 
 NOTES

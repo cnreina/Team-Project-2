@@ -9,7 +9,7 @@
             <% if (errorMessage) { %>
                 <div class="user-message user-message--error"><%= errorMessage %></div>
             <% } %>
-            <form class="task-form" action="/user/edit-task" method="POST" enctype="multipart/form-data">
+            <form class="taskform" action="/user/edit-task" method="POST" enctype="multipart/form-data">
                 <div class="form-control">
                     <label for="title">Title</label>
                     <input class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"

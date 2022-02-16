@@ -43,11 +43,10 @@
   justify-content: space-around;
   align-items: center;
   background-color: #c6cada;
-  /* box-shadow: 0 6px 8px rgba(0, 0, 0, 0.26); */
   margin: auto;
   padding: 0;
   border-radius: 6px;
-  width: 50%;
+  width: 80%;
 }
 
 .tasklist_div {
@@ -80,48 +79,9 @@
   padding: 4px;
 }
 
-.task-form {
+.taskform {
     width: 20rem;
     max-width: 90%;
     margin: auto;
     display: block;
-}
-
-
-@media print {
-    header, footer, aside, nav, form, iframe {
-      display: none !important;
-    }
-
-    body {
-      background-color: white;
-    }
-
-    .archivedTaskContainer {
-      width: 100%;
-      margin: 0;
-      padding: 1vw;
-    }
-
-    #archivedTaskTable {
-      width: 100% !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-
-    #archivedTaskTable th {
-      padding-top:      10px;
-      padding-bottom:   10px;
-      text-align:       left;
-      background-color: white;
-      color:            rgb(8, 8, 8);
-    }
-
-    #archivedTaskTable tr:nth-child(even){
-      background-color: white;
-    }
-
-    a:after {
-        content: "("attr(href)")";
-    }
 }
