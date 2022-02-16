@@ -6,19 +6,20 @@ const PDFDocument           = require('pdfkit');
 
 const APP_CWD               = process.cwd();
 
-const Task    = require(APP_CWD + '/models/taskSchema');
-const Archive = require(APP_CWD + '/models/archiveSchema');
+const systemController      = require(APP_CWD + '/controllers/systemController');
+
+const { TaskModel }                  = require(APP_CWD + '/models/taskSchema');
+const Archive                 = require(APP_CWD + '/models/archiveSchema');
 
 exports.postPunchIn = (req, res, next) => {
   const taskId = req.body.taskId;
   const inTime = Date.now();
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
     if (task.timeStart) {
       return res.redirect('/user/task-list');
     }
     task.timeStart = inTime;
     task.save().then(result => {
-      // console.log('postPunchIn: ',result);
       res.redirect('/user/task-list');
     })
       .catch(err => {
@@ -40,7 +41,7 @@ exports.postPunchOut = (req, res, next) => {
   // console.log('punching Out');
   const taskId = req.body.taskId;
   const outTime = Date.now();
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
     if (!task.timeStart) {
       return res.redirect('/user/task-list');
     }
@@ -103,7 +104,7 @@ exports.postAddTask = (req, res, next) => {
     });
   }
 
-  const task = new Task({
+  const task = new TaskModel({
     title:        title,
     totaltime:    0,
     description:  description,
@@ -123,7 +124,7 @@ exports.postAddTask = (req, res, next) => {
 
 exports.getEditTaskView = (req, res, next) => {
   const taskId = req.params.taskId;
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
     if (!task) {
       console.log('getEditTaskView ERROR: ', task);
       return res.redirect('/');
@@ -158,7 +159,7 @@ exports.postEditTask = (req, res, next) => {
     return next(error);
   }
 
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
     if (task.userId.toString() !== req.user._id.toString()) {
       return res.redirect('/');
     }
@@ -178,7 +179,7 @@ exports.postEditTask = (req, res, next) => {
 };
 
 exports.getTasksView = (req, res, next) => {
-  Task.find({ 'userId': req.user._id, archived: false }).then(tasks => {
+  TaskModel.find({ 'userId': req.user._id, archived: false }).then(tasks => {
     res.render('user/tasksView', {
       tasks:      tasks,
       pageTitle:  'User Tasks',
@@ -195,7 +196,7 @@ exports.getTasksView = (req, res, next) => {
 
 exports.postArchiveTask = (req, res, next) => {
   const taskId = req.body.taskId;
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
     if (task.archived) {
       const error = new Error('ERROR: Task already archived');
       error.httpStatusCode = 500;
@@ -272,7 +273,7 @@ exports.deleteArchiveTask = (req, res, next) => {
     });
     archive.tasks = newTaskList;
     archive.save().then(result => {
-        Task.deleteOne({ _id: taskId }).then(result => {
+        TaskModel.deleteOne({ _id: taskId }).then(result => {
           res.redirect('/user/archive');
         })
           .catch(err => {
@@ -315,7 +316,7 @@ exports.postMakeActive = (req, res, next) => {
       archive.tasks = newTaskList;
       archive.save().then(result => {
           // make task not archived
-          Task.findOne({ _id: taskId }).then(task => {
+          TaskModel.findOne({ _id: taskId }).then(task => {
               task.archived = false;
               task.save().then(result => {
                   res.redirect('/user/task-list');

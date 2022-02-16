@@ -85,3 +85,94 @@
     margin: auto;
     display: block;
 }
+
+/* ARCHIVED TASK LIST */
+
+.archivedTasklist_div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #5f616b;
+  color: #ebecf5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin: 10px;
+  padding: 0;
+}
+
+.archivedTasklist_ul {
+  list-style-type: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 5px;
+}
+
+.archivedTasklist_li {
+  float: left !important;
+  margin: 0;
+  padding-left: 5px;
+  padding-top: 0;
+  padding-right: 5px;
+  padding-bottom: 0;
+}
+
+.sharedTasklist_ul {
+  flex-direction: column;
+  list-style-type: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 5px;
+}
+
+.sharedTasklist_li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding-left: 5px;
+  padding-top: 0;
+  padding-right: 5px;
+  padding-bottom: 0;
+}
+
+@media print {
+    header, footer, aside, nav, form, iframe {
+      display: none !important;
+    }
+
+    body {
+      background-color: white;
+    }
+
+    .archivedTaskContainer {
+      width: 100%;
+      margin: 0;
+      padding: 1vw;
+    }
+
+    #archivedTaskTable {
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    #archivedTaskTable th {
+      padding-top:      10px;
+      padding-bottom:   10px;
+      text-align:       left;
+      background-color: white;
+      color:            rgb(8, 8, 8);
+    }
+
+    #archivedTaskTable tr:nth-child(even){
+      background-color: white;
+    }
+
+    a:after {
+        content: "("attr(href)")";
+    }
+}

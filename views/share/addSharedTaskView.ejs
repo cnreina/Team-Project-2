@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+    <%- include('../includes/navigationInclude.ejs') %>
+        <main>
+            <% if (errorMessage) { %>
+                <div class="user-message user-message--error"><%= errorMessage %></div>
+            <% } %>
+            <form class="taskform" action="/share/add-shared-task" method="POST" enctype="multipart/form-data">
+                <div class="form-control">
+                    <label for="sharedTaskTitle">Shared Task Title</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'sharedTaskTitle') ? 'invalid' : '' %>"
+                        type="text" 
+                        name="sharedTaskTitle" 
+                        id="sharedTaskTitle" 
+                        value="">
+                </div>
+                <div class="form-control">
+                    <label for="title">Title</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"
+                        type="text" 
+                        name="title" 
+                        id="title" 
+                        value="">
+                </div>
+                <div class="form-control">
+                    <label for="timestart">Time Start</label>
+                    <input type="text" name="timestart" id="timestart" value="">
+                </div>
+                <div class="form-control">
+                    <label for="totaltime">Total Time</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'totaltime') ? 'invalid' : '' %>"
+                        type="number" 
+                        name="totaltime" 
+                        id="totaltime" 
+                        step="0.01" 
+                        value="">
+                </div>
+                <div class="form-control">
+                    <label for="description">Description</label>
+                    <textarea 
+                        class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
+                        name="description" 
+                        id="description" 
+                        rows="5"></textarea>
+                </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn" type="submit">Add Task</button>
+            </form>
+        </main>
+        <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>
