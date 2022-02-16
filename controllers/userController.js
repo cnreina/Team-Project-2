@@ -10,7 +10,6 @@ const systemController      = require(APP_CWD + '/controllers/systemController')
 
 const { TaskModel }                  = require(APP_CWD + '/models/taskSchema');
 const Archive                 = require(APP_CWD + '/models/archiveSchema');
-const SharedTask            = require("../models/sharedTaskSchema");
 
 exports.postPunchIn = (req, res, next) => {
   const taskId = req.body.taskId;
@@ -21,7 +20,6 @@ exports.postPunchIn = (req, res, next) => {
     }
     task.timeStart = inTime;
     task.save().then(result => {
-      // console.log('postPunchIn: ',result);
       res.redirect('/user/task-list');
     })
       .catch(err => {
@@ -275,7 +273,7 @@ exports.deleteArchiveTask = (req, res, next) => {
     });
     archive.tasks = newTaskList;
     archive.save().then(result => {
-        Task.deleteOne({ _id: taskId }).then(result => {
+        TaskModel.deleteOne({ _id: taskId }).then(result => {
           res.redirect('/user/archive');
         })
           .catch(err => {
@@ -318,7 +316,7 @@ exports.postMakeActive = (req, res, next) => {
       archive.tasks = newTaskList;
       archive.save().then(result => {
           // make task not archived
-          Task.findOne({ _id: taskId }).then(task => {
+          TaskModel.findOne({ _id: taskId }).then(task => {
               task.archived = false;
               task.save().then(result => {
                   res.redirect('/user/task-list');

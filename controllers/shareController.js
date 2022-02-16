@@ -80,7 +80,8 @@ exports.postAddSharedTask = (req, res, next) => {
       totaltime:    totaltime,
       description:  description,
       timestart:    timestart,
-      userId:       req.user
+      userId:       req.user,
+      archived: false,
     });
     const sharedTask = new SharedTask({
       title: sharedTaskTitle,
