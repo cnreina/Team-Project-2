@@ -6,9 +6,7 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <% if (archive.length <= 0) { %>
-                <h1>No archive available</h1>
-            <% } else { %>
+            <% if (archive.tasks.length > 0) { %>
                 <div class="tasklistContainer_div">
                     <% archive.tasks.forEach(task=> { %>
                         <div class="tasklist_div">
@@ -34,6 +32,8 @@
                         </div>
                     <% }); %>
                 </div>
+            <% } else { %>
+                <h1>No tasks found</h1>
             <% } %>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>
