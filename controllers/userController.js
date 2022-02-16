@@ -4,15 +4,13 @@ const { validationResult }  = require('express-validator/check');
 const fileObject            = require('fs');
 const PDFDocument           = require('pdfkit');
 
-const STRYPE_API_KEY        = 'sk_test_51KKD1BAuTVk1SDPGF8v9dXfkoHYb6aSilj7zinWcTDX96Evf937kZ3yq0bOrsL1M98bIO4ObOwvpyRjXg0uDttFj00GpNAE9On';
-const stripe                = require('stripe')(STRYPE_API_KEY);
-
 const APP_CWD               = process.cwd();
 
 const systemController      = require(APP_CWD + '/controllers/systemController');
 
-const Task                  = require(APP_CWD + '/models/taskSchema');
+const { TaskModel }                  = require(APP_CWD + '/models/taskSchema');
 const Archive                 = require(APP_CWD + '/models/archiveSchema');
+const SharedTask            = require("../models/sharedTaskSchema");
 
 exports.getAddTaskView = (req, res, next) => {
   res.render('user/addTaskView', {
@@ -61,7 +59,7 @@ exports.postAddTask = (req, res, next) => {
     });
   }
 
-  const task = new Task({
+  const task = new TaskModel({
     title:        title,
     totaltime:    totaltime,
     description:  description,
@@ -81,7 +79,7 @@ exports.postAddTask = (req, res, next) => {
 
 exports.getEditTaskView = (req, res, next) => {
   const taskId = req.params.taskId;
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
       if (!task) {
         console.log('getEditTaskView ERROR: ', task);
         return res.redirect('/');
@@ -127,7 +125,7 @@ exports.postEditTask = (req, res, next) => {
     });
   }
 
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
       if (task.userId.toString() !== req.user._id.toString()) {
         return res.redirect('/');
       }
@@ -149,7 +147,7 @@ exports.postEditTask = (req, res, next) => {
 };
 
 exports.getTasksView = (req, res, next) => {
-  Task.find({ userId: req.user._id }).then(tasks => {
+  TaskModel.find({ userId: req.user._id }).then(tasks => {
       res.render('user/tasksView', {
         tasks: tasks,
         pageTitle: 'User Tasks',
@@ -166,7 +164,7 @@ exports.getTasksView = (req, res, next) => {
 
 exports.deleteTask = (req, res, next) => {
   const taskId = req.params.taskId;
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
       if (!task) {
         console.log('deleteTask ERROR: ', task);
         return next(new Error('Task not found.'));
@@ -205,7 +203,7 @@ exports.getTaskListView = (req, res, next) => {
 
 exports.postTaskList = (req, res, next) => {
   const taskId = req.body.taskId;
-  Task.findById(taskId).then(task => {
+  TaskModel.findById(taskId).then(task => {
       return req.user.addToTaskList(task);
     })
     .then(result => {

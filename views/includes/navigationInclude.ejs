@@ -11,6 +11,9 @@
             </li>
             <% if (isAuthenticated) { %>
                 <li class="main-header__task">
+                    <a class="<%= path === '/share/add-shared-task' ? 'active' : '' %>" href="/share/add-shared-task">Add Shared Task</a>
+                </li>
+                <li class="main-header__task">
                     <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
                 </li>
                 <li class="main-header__task">
