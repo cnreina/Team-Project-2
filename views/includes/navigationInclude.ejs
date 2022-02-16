@@ -17,12 +17,13 @@
                     <a class="<%= path === '/user/archive' ? 'active' : '' %>" href="/user/archive">Archived Tasks</a>
                 </li>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/add-task' ? 'active' : '' %>" href="/user/add-task">Add Task
-                    </a>
+                    <a class="<%= path === '/user/add-task' ? 'active' : '' %>" href="/user/add-task">Add Task</a>
                 </li>
                 <li class="main-header__task">
-                    <a class="<%= path === '/user/task-list' ? 'active' : '' %>" href="/user/task-list">User Tasks
-                    </a>
+                    <a class="<%= path === '/user/task-list' ? 'active' : '' %>" href="/user/task-list">User Tasks</a>
+                </li>
+                <li class="main-header__task">
+                    <div><p id="timedisplay"></p></div>
                 </li>
             <% } %>
         </ul>

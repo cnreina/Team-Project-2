@@ -5,7 +5,6 @@
     Leonardo Souza
 */
 
-
 require('dotenv').config();
 const express                         = require('express');
 const session                         = require('express-session');
@@ -27,18 +26,15 @@ const CORS_OPTIONS              = { origin: HEROKU_TEAM_APP_URL, optionsSuccessS
 const cors                      = require('cors');
 
 const csrf                      = require('csurf');
+const csrfProtection            = csrf();
 const flash                     = require('connect-flash');
 const multer                    = require('multer');
-
-// ENTITIES
-const User                      = require(APP_CWD + '/models/userSchema');
 
 // CONTROLLERS
 const sessionController         = require(APP_CWD + '/controllers/sessionController');
 const authController            = require(APP_CWD + '/controllers/authController');
 const errorController           = require(APP_CWD + '/controllers/errorController');
 
-const csrfProtection            = csrf();
 const fileStorage               = multer.diskStorage({destination: (req, file, callBack) => {
   callBack(null, 'images');
   },
