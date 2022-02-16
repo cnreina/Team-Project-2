@@ -16,6 +16,10 @@
                         type="text" name="title" id="title"
                         value="<% if (!hasError) { %><%= task.title %><% } %>">
                 </div>
+                <div>
+                    <label for="shared">Shared</label>
+                    <input type="checkbox" id="shared" name="shared" <% if(Boolean(task.shared)) { %><%= 'checked' %><% } %>>
+                </div>
                 <div class="form-control">
                     <label for="description">Description</label>
                     <textarea

@@ -19,6 +19,10 @@
                         id="title" 
                         value="">
                 </div>
+                <div>
+                    <label for="shared">Shared</label>
+                    <input type="checkbox" id="shared" name="shared">
+                </div>
                 <div class="form-control">
                     <label for="description">Description</label>
                     <textarea 
@@ -27,8 +31,10 @@
                         id="description" 
                         rows="5"></textarea>
                 </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button class="btn" type="submit">Add Task</button>
+                <div class="form-control">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn" type="submit">Add Task</button>
+                </div>
             </form>
         </main>
         <%- include('../includes/javascriptInclude.ejs') %>

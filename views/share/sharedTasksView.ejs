@@ -9,6 +9,7 @@
                 <% if (tasks.length > 0) { %>
                     <div class="tasklistContainer_div">
                     <% for (let task of tasks) { %>
+                        <% if (!Boolean(task.shared)) {continue}%>
                         <div class="tasklist_div">
                             <ul class="tasklist_ul">
                                 <li class="tasklist_li">

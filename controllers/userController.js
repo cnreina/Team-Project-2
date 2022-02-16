@@ -84,8 +84,9 @@ exports.getAddTaskView = (req, res, next) => {
 };
 
 exports.postAddTask = (req, res, next) => {
-  const title = req.body.title;
+  const title       = req.body.title;
   const description = req.body.description;
+  const sharedtask  = req.body.shared;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -109,6 +110,7 @@ exports.postAddTask = (req, res, next) => {
     description:  description,
     userId:       req.user,
     archived:     false,
+    shared:       Boolean(sharedtask)
   });
   task.save().then(result => {
     res.redirect('/user/task-list');
@@ -146,9 +148,10 @@ exports.getEditTaskView = (req, res, next) => {
 };
 
 exports.postEditTask = (req, res, next) => {
-  const taskId            = req.body.taskId;
-  const updatedTitle      = req.body.title;
-  const updatedDesc       = req.body.description;
+  const taskId        = req.body.taskId;
+  const updatedTitle  = req.body.title;
+  const updatedDesc   = req.body.description;
+  const sharedtask    = req.body.shared;
 
   const errors = validationResult(req);
   if (!taskId) {
@@ -165,6 +168,7 @@ exports.postEditTask = (req, res, next) => {
 
     task.title        = updatedTitle;
     task.description  = updatedDesc;
+    task.shared       = Boolean(sharedtask);
     return task.save().then(result => {
       res.redirect('/user/task-list');
     });
@@ -203,6 +207,7 @@ exports.postArchiveTask = (req, res, next) => {
       throw error;
     }
     // Update and save task
+    task.shared   = false;
     task.archived = true;
     task.save().then(result => {
         Archive.findOne({ 'user.userId': req.user._id, }).then(archive => {
