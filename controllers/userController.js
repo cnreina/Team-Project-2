@@ -14,12 +14,13 @@ exports.postPunchIn = (req, res, next) => {
   const inTime = Date.now();
   Task.findById(taskId).then(task => {
     if (task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.redirect('back');
     }
     task.timeStart = inTime;
     task.save().then(result => {
       // console.log('postPunchIn: ',result);
-      res.redirect('/user/task-list');
+      // res.redirect('/user/task-list');
+      return res.redirect('back');
     })
       .catch(err => {
         const error = new Error(err);
@@ -42,7 +43,7 @@ exports.postPunchOut = (req, res, next) => {
   const outTime = Date.now();
   Task.findById(taskId).then(task => {
     if (!task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.redirect('back');
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
@@ -56,7 +57,7 @@ exports.postPunchOut = (req, res, next) => {
     task.minutes = minutes;
     task.save().then(result => {
       // console.log('postPunchOut: ', result);
-      res.redirect('/user/task-list');
+      return res.redirect('back');
     })
       .catch(err => {
         const error = new Error(err);
@@ -74,7 +75,7 @@ exports.postPunchOut = (req, res, next) => {
 }
 
 exports.getAddTaskView = (req, res, next) => {
-  res.render('user/add-task', {
+  res.render('user/addTaskView', {
     pageTitle: 'Add Task',
     path: '/user/add-task',
     hasError: false,
@@ -91,7 +92,7 @@ exports.postAddTask = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render('user/add-task', {
+    return res.status(422).render('user/addTaskView', {
       pageTitle:  'Add Task',
       path:       '/user/add-task',
       hasError:   true,

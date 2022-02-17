@@ -12,18 +12,35 @@
                         <% if (!Boolean(task.shared)) {continue}%>
                         <div class="tasklist_div">
                             <ul class="tasklist_ul">
-                                <li class="tasklist_li">
-                                    <h3><%= task.title %></h3>
-                                </li>
-                                <li class="tasklist_li"><p>Time: <%= task.totaltime %></p></li>
-                                <li class="tasklist_li"><a class="taskButton" href="/user/edit-task/<%= task._id %>">Edit</a></li>
-                                <li class="tasklist_li">
-                                    <input type="hidden" value="<%= task._id %>" name="taskId">
-                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <button class="taskButton" type="button" onclick="deleteTask(this)">Delete</button>
-                                </li>
-                                <li class="tasklist_li"><button class="taskButton" type="button"onclick="punchIn(this)">Punch-In</button></li>
-                                <li class="tasklist_li"><button class="taskButton" type="button"onclick="punchOut(this)">Punch-Out</button></li>
+                                <!-- INFO -->
+                                <div class="taskinfo_div">
+                                    <li class="tasklist_li"><p class="taskTitle"><%= task.title %></p></li>
+                                    <li class="tasklist_li"><p>Time: H: <%= task.hours %> M: <%= task.minutes %></p></li>
+                                </div>
+                                <!-- BUTTONS -->
+                                <div class="taskbuttons_div">
+                                    <li class="tasklist_li">
+                                        <input type="hidden" value="<%= task._id %>" name="taskId">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    </li>
+                                    <% if (!task.timeStart) { %>
+                                        <li class="tasklist_li">
+                                            <form action="/user/punchIn" method="POST">
+                                                <input type="hidden" value="<%= task._id %>" name="taskId">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <button class="taskButton" type="submit">Punch In</button>
+                                            </form>
+                                        </li>
+                                    <% } else {%>
+                                        <li class="tasklist_li">
+                                            <form action="/user/punchOut" method="POST">
+                                                <input type="hidden" value="<%= task._id %>" name="taskId">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <button class="taskButton" type="submit">Punch Out</button>
+                                            </form>
+                                        </li>
+                                    <% } %>
+                                </div>
                             </ul>
                         </div>
                     <% } %>
@@ -32,6 +49,6 @@
                     <h1>No tasks found</h1>
                 <% } %>
             </main>
-            <%- include('../includes/javascriptInclude.ejs') %>
+        <%- include('../includes/javascriptInclude.ejs') %>
     </body>
 </html>
