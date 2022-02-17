@@ -22,7 +22,7 @@
   font: inherit;
   border: 2px solid #695100;
   color: #bd9103;
-  background: white;
+  background: rgb(228, 221, 206);
   cursor: pointer;
   border-radius: 6px;
   width: 160px;
@@ -31,6 +31,48 @@
 .taskButton:hover,
 .taskButton:active {
   background-color: #c7a200;
+  color: white;
+}
+
+/* PUNCH BUTTONS */
+
+.punchInButton {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  text-align: center;
+  font: inherit;
+  border: 2px solid #695100;
+  color: #ece5cd;
+  background: rgb(190, 3, 3);
+  cursor: pointer;
+  border-radius: 6px;
+  width: 160px;
+}
+
+.punchInButton:hover,
+.punchInButton:active {
+  background: rgb(145, 12, 12);
+  color: white;
+}
+
+.punchOutButton {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  text-align: center;
+  font: inherit;
+  border: 2px solid #695100;
+  color: #ece5cd;
+  background: rgb(3, 190, 3);
+  cursor: pointer;
+  border-radius: 6px;
+  width: 160px;
+}
+
+.punchOutButton:hover,
+.punchOutButton:active {
+  background: rgb(12, 145, 12);
   color: white;
 }
 
@@ -90,6 +132,19 @@
   float: left !important;
   margin: auto;
   padding: 4px;
+}
+
+.taskFormContainer_div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #40475f;
+  color: white;
+  margin: auto;
+  padding: 16px;
+  border-radius: 6px;
+  width: 80%;
 }
 
 .taskform {

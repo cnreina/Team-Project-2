@@ -14,9 +14,6 @@
                                 <!-- INFO -->
                                 <div class="taskinfo_div">
                                     <li class="tasklist_li"><p class="taskTitle"><%= task.title %></p></li>
-                                    <% if (task.timeStart) { %>
-                                        <li class="tasklist_li"><h3>Active</h3></li>
-                                    <% } %>
                                     <li class="tasklist_li"><p>Time: H: <%= task.hours %> M: <%= task.minutes %></p></li>
                                 </div>
                                 <!-- BUTTONS -->
@@ -34,7 +31,7 @@
                                             <form action="/user/punchIn" method="POST">
                                                 <input type="hidden" value="<%= task._id %>" name="taskId">
                                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                <button class="taskButton" type="submit">Punch In</button>
+                                                <button class="punchInButton" type="submit">Punch In</button>
                                             </form>
                                         </li>
                                     <% } else {%>
@@ -42,7 +39,7 @@
                                             <form action="/user/punchOut" method="POST">
                                                 <input type="hidden" value="<%= task._id %>" name="taskId">
                                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                <button class="taskButton" type="submit">Punch Out</button>
+                                                <button class="punchOutButton" type="submit">Punch Out</button>
                                             </form>
                                         </li>
                                     <% } %>

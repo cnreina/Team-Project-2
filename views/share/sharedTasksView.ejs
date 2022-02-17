@@ -28,7 +28,7 @@
                                             <form action="/user/punchIn" method="POST">
                                                 <input type="hidden" value="<%= task._id %>" name="taskId">
                                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                <button class="taskButton" type="submit">Punch In</button>
+                                                <button class="punchInButton" type="submit">Punch In</button>
                                             </form>
                                         </li>
                                     <% } else {%>
@@ -36,7 +36,7 @@
                                             <form action="/user/punchOut" method="POST">
                                                 <input type="hidden" value="<%= task._id %>" name="taskId">
                                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                <button class="taskButton" type="submit">Punch Out</button>
+                                                <button class="punchOutButton" type="submit">Punch Out</button>
                                             </form>
                                         </li>
                                     <% } %>
