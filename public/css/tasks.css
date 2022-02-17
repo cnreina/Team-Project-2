@@ -97,6 +97,7 @@
   align-items: center;
   background-color: #2c2d31;
   color: #ebecf5;
+  border: 2px solid #695100;
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.26);
   margin: 8px;
   padding: 6px;
