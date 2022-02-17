@@ -1,9 +1,8 @@
 REFACTOR
 -------------------------------------------
 
-reset when archiving task
-filter shared tasks
-timer to retrieve total count
+timer to retrieve and display total count in
+real time while task is active.
 
 
 NOTES
@@ -12,6 +11,3 @@ NOTES
 MVP URL:    https://cse341-team-2.herokuapp.com/
 MVP REPO:   https://github.com/cnreina/Team-Project-2
 
-Task Name > Punch-In button, Punch-Out button > Total Time
-
-Test date: 2016-05-18T16:00:00

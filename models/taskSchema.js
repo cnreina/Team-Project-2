@@ -34,6 +34,10 @@ const TaskSchema = new Schema({
   archived: {
     type: Boolean,
     required: true
+  },
+  shared: {
+    type: Boolean,
+    required: true
   }
 },
 { timestamps: true }

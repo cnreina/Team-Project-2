@@ -1,9 +1,3 @@
-setInterval(userTimer, 1000);
-function userTimer() {
-  const elapsedTime = new Date();
-  document.getElementById("timedisplay").innerHTML = elapsedTime.toLocaleTimeString();
-}
-
 const deleteTask = btn => {
   const taskId      = btn.parentNode.querySelector('[name=taskId]').value;
   const csrf        = btn.parentNode.querySelector('[name=_csrf]').value;

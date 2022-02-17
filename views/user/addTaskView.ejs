@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../includes/headInclude.ejs') %>
+    </head>
+    <body>
+    <%- include('../includes/navigationInclude.ejs') %>
+        <main>
+            <div class="taskFormContainer_div">
+                <% if (errorMessage) { %>
+                    <div class="user-message user-message--error"><%= errorMessage %></div>
+                <% } %>
+                <form class="taskform" action="/user/add-task" method="POST" enctype="multipart/form-data">
+                    <div class="form-control">
+                        <label for="title">Title</label>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'title') ? 'invalid' : '' %>"
+                            type="text" 
+                            name="title" 
+                            id="title" 
+                            value="">
+                    </div>
+                    <div>
+                        <label for="shared">Shared</label>
+                        <input type="checkbox" id="shared" name="shared">
+                    </div>
+                    <div class="form-control">
+                        <label for="description">Description</label>
+                        <textarea 
+                            class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
+                            name="description" 
+                            id="description" 
+                            rows="5"></textarea>
+                    </div>
+                    <div class="form-control">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="taskButton" type="submit">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <%- include('../includes/javascriptInclude.ejs') %>
+    </body>
+</html>

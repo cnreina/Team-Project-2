@@ -14,12 +14,13 @@ exports.postPunchIn = (req, res, next) => {
   const inTime = Date.now();
   Task.findById(taskId).then(task => {
     if (task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.redirect('back');
     }
     task.timeStart = inTime;
     task.save().then(result => {
       // console.log('postPunchIn: ',result);
-      res.redirect('/user/task-list');
+      // res.redirect('/user/task-list');
+      return res.redirect('back');
     })
       .catch(err => {
         const error = new Error(err);
@@ -42,7 +43,7 @@ exports.postPunchOut = (req, res, next) => {
   const outTime = Date.now();
   Task.findById(taskId).then(task => {
     if (!task.timeStart) {
-      return res.redirect('/user/task-list');
+      return res.redirect('back');
     }
     const inTime = task.timeStart;
     const totalTime = outTime - inTime;
@@ -56,7 +57,7 @@ exports.postPunchOut = (req, res, next) => {
     task.minutes = minutes;
     task.save().then(result => {
       // console.log('postPunchOut: ', result);
-      res.redirect('/user/task-list');
+      return res.redirect('back');
     })
       .catch(err => {
         const error = new Error(err);
@@ -74,7 +75,7 @@ exports.postPunchOut = (req, res, next) => {
 }
 
 exports.getAddTaskView = (req, res, next) => {
-  res.render('user/add-task', {
+  res.render('user/addTaskView', {
     pageTitle: 'Add Task',
     path: '/user/add-task',
     hasError: false,
@@ -84,13 +85,14 @@ exports.getAddTaskView = (req, res, next) => {
 };
 
 exports.postAddTask = (req, res, next) => {
-  const title = req.body.title;
+  const title       = req.body.title;
   const description = req.body.description;
+  const sharedtask  = req.body.shared;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render('user/add-task', {
+    return res.status(422).render('user/addTaskView', {
       pageTitle:  'Add Task',
       path:       '/user/add-task',
       hasError:   true,
@@ -109,6 +111,7 @@ exports.postAddTask = (req, res, next) => {
     description:  description,
     userId:       req.user,
     archived:     false,
+    shared:       Boolean(sharedtask)
   });
   task.save().then(result => {
     res.redirect('/user/task-list');
@@ -146,9 +149,10 @@ exports.getEditTaskView = (req, res, next) => {
 };
 
 exports.postEditTask = (req, res, next) => {
-  const taskId            = req.body.taskId;
-  const updatedTitle      = req.body.title;
-  const updatedDesc       = req.body.description;
+  const taskId        = req.body.taskId;
+  const updatedTitle  = req.body.title;
+  const updatedDesc   = req.body.description;
+  const sharedtask    = req.body.shared;
 
   const errors = validationResult(req);
   if (!taskId) {
@@ -165,6 +169,7 @@ exports.postEditTask = (req, res, next) => {
 
     task.title        = updatedTitle;
     task.description  = updatedDesc;
+    task.shared       = Boolean(sharedtask);
     return task.save().then(result => {
       res.redirect('/user/task-list');
     });
@@ -203,6 +208,7 @@ exports.postArchiveTask = (req, res, next) => {
       throw error;
     }
     // Update and save task
+    task.shared   = false;
     task.archived = true;
     task.save().then(result => {
         Archive.findOne({ 'user.userId': req.user._id, }).then(archive => {
