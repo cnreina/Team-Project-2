@@ -226,6 +226,7 @@ exports.postArchiveTask = (req, res, next) => {
               .catch(err => {
                 console.log(err);
               })
+              return;
           }
           // Push a reference to the task into an existing archive
           archive.tasks.push(task._id);
