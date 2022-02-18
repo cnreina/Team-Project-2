@@ -68,6 +68,19 @@
   cursor: pointer;
   border-radius: 6px;
   width: 160px;
+  animation: punchOutButton 2s ease-in-out infinite alternate;
+}
+
+@keyframes punchOutButton {
+  from {
+    background: rgb(3, 236, 3);
+    color: #8b7118;
+  }
+  
+  to {
+    background: rgb(23, 104, 23);
+    color: #ece5cd;
+  }
 }
 
 .punchOutButton:hover,
@@ -110,6 +123,13 @@
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.taskinfo_div p {
+  margin: 0;
+  padding: 0;
 }
 
 .taskbuttons_div {
@@ -117,6 +137,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  margin-top: 6px;
 }
 
 .tasklist_ul {
