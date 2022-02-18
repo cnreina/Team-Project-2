@@ -1,10 +1,9 @@
-const deleteTask = btn => {
+const getTimeCount = btn => {
   const taskId      = btn.parentNode.querySelector('[name=taskId]').value;
   const csrf        = btn.parentNode.querySelector('[name=_csrf]').value;
-  const taskElement = btn.closest('ul');
 
-  fetch('/user/delete-task/' + taskId, {
-    method: 'DELETE',
+  fetch('/user/timecount/' + taskId, {
+    method: 'POST',
     headers: {
       'csrf-token': csrf
     }
@@ -13,9 +12,9 @@ const deleteTask = btn => {
       return result.json();
     })
     .then(data => {
-      taskElement.parentNode.removeChild(taskElement);
+      console.log('getTimeCount data: ', data);
     })
     .catch(err => {
-      console.log('deleteTask ERROR: ', err);
+      console.log('getTimeCount ERROR: ', err);
     });
 };

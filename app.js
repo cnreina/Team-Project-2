@@ -1,7 +1,7 @@
 /* CSE 341 - Team 2
     Carlos N Reina
-    Michael Norton
     Aaron Rooks
+    Michael Norton
     Leonardo Souza
 */
 
@@ -22,20 +22,20 @@ const APP_CWD                         = process.cwd();
 const PORT                            = process.env.PORT || 3000;
 const HEROKU_TEAM_APP_URL             = process.env.HEROKU_TEAM_APP_URL;
 
-const CORS_OPTIONS              = { origin: HEROKU_TEAM_APP_URL, optionsSuccessStatus: 200 };
-const cors                      = require('cors');
+const CORS_OPTIONS                    = { origin: HEROKU_TEAM_APP_URL, optionsSuccessStatus: 200 };
+const cors                            = require('cors');
 
-const csrf                      = require('csurf');
-const csrfProtection            = csrf();
-const flash                     = require('connect-flash');
-const multer                    = require('multer');
+const csrf                            = require('csurf');
+const csrfProtection                  = csrf();
+const flash                           = require('connect-flash');
+const multer                          = require('multer');
 
 // CONTROLLERS
-const sessionController         = require(APP_CWD + '/controllers/sessionController');
-const authController            = require(APP_CWD + '/controllers/authController');
-const errorController           = require(APP_CWD + '/controllers/errorController');
+const sessionController               = require(APP_CWD + '/controllers/sessionController');
+const authController                  = require(APP_CWD + '/controllers/authController');
+const errorController                 = require(APP_CWD + '/controllers/errorController');
 
-const fileStorage               = multer.diskStorage({destination: (req, file, callBack) => {
+const fileStorage                     = multer.diskStorage({destination: (req, file, callBack) => {
   callBack(null, 'images');
   },
   filename: (req, file, callBack) => {
