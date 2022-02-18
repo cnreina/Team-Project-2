@@ -356,35 +356,21 @@ exports.postMakeActive = (req, res, next) => {
 }
 
 exports.getArchiveView = (req, res, next) => {
-  Archive.findOne({ 'user.userId': req.user._id})
-    .then(archive => {
-      if(!archive){
-        return res.render('user/archivedTasksView', {
-          path: '/user/archive',
-          pageTitle: 'Archive',
-          archive: archive,
-        });
-      };
-      archive.populate('tasks')
-        .execPopulate()
-        .then(archive => {
-          res.render('user/archivedTasksView', {
-            path: '/user/archive',
-            pageTitle: 'Archive',
-            archive: archive,
-          });
+    Archive.findOne({ 'user.userId': req.user._id, })
+        .populate({
+            path: 'tasks',
+            populate: { path: 'tasks' }
         })
-        .catch(err => {
-          const error = new Error(err);
-          error.httpStatusCode = 500;
-          console.log('getArchiveView ERROR: ', error);
-          return next(error);
-        });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      console.log('getArchiveView ERROR: ', error);
-      return next(error);
+        .then(archive => {
+            return res.render('user/archivedTasksView', {
+                path: '/user/archive',
+                pageTitle: 'Archive',
+                archive: archive,
+            })
+        }).catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('getArchiveView ERROR: ', error);
+        return next(error);
     });
 };
