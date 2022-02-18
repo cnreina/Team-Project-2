@@ -201,7 +201,7 @@ exports.getTasksView = (req, res, next) => {
 exports.postArchiveTask = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-    if (!task || task.archived) {
+    if (task.archived) {
       const error = new Error('ERROR: Task already archived');
       error.httpStatusCode = 500;
       console.log(error);
