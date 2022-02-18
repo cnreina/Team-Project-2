@@ -6,7 +6,7 @@
     <body>
         <%- include('../includes/navigationInclude.ejs') %>
         <main>
-            <% if (archive.tasks.length > 0) { %>
+            <% if (archive && archive.tasks.length > 0) { %>
                 <div class="tasklistContainer_div">
                     <% archive.tasks.forEach(task=> { %>
                         <div class="tasklist_div">

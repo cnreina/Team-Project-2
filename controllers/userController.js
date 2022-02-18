@@ -201,7 +201,7 @@ exports.getTasksView = (req, res, next) => {
 exports.postArchiveTask = (req, res, next) => {
   const taskId = req.body.taskId;
   Task.findById(taskId).then(task => {
-    if (task.archived) {
+    if (!task || task.archived) {
       const error = new Error('ERROR: Task already archived');
       error.httpStatusCode = 500;
       console.log(error);
@@ -356,8 +356,15 @@ exports.postMakeActive = (req, res, next) => {
 }
 
 exports.getArchiveView = (req, res, next) => {
-  Archive.findOne({ 'user.userId': req.user._id, })
+  Archive.findOne({ 'user.userId': req.user._id})
     .then(archive => {
+      if(!archive){
+        return res.render('user/archivedTasksView', {
+          path: '/user/archive',
+          pageTitle: 'Archive',
+          archive: archive,
+        });
+      };
       archive.populate('tasks')
         .execPopulate()
         .then(archive => {

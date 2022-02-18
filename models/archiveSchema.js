@@ -15,7 +15,7 @@ const ArchiveSchema = new Schema({
   tasks: [{ 
     type : Schema.Types.ObjectId, 
     ref: 'Task',
-    required: true, 
+    required: true
   }],
   user: {
     email: {
