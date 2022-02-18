@@ -221,12 +221,12 @@ exports.postArchiveTask = (req, res, next) => {
               tasks: [task._id]
             });
             newArchive.save().then(result => {
-              return res.redirect('/user/archive');
+              return res.redirect('back');
             })
-              .catch(err => {
-                console.log(err);
-              })
-              return;
+            .catch(err => {
+              console.log(err);
+            })
+            return;
           }
           // Push a reference to the task into an existing archive
           archive.tasks.push(task._id);
